@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Profile page of a hero in the PawPal Connect community. Learn more about their achievements and impact.">
+    <meta name="keywords" content="hero profile, community, achievements, impact">
+    <title>Hero Profile - PawPal Connect</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #4caf50; /* Green */
+            --secondary-color: #388e3c; /* Darker green */
+            --tertiary-color: #2c6d2f; /* Even darker green */
+            --text-color-light: #f4f7f9;
+            --text-color-dark: #333;
+            --background-color: #ffffff;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            padding: 0;
+            color: var(--text-color-dark);
+            background: #f4f7f9;
+        }
+
+        header {
+            background: var(--primary-color);
+            color: white;
+            padding: 1rem;
+            box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.2);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+        }
+
+        nav .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 75rem;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+
+        nav h1 {
+            margin: 0;
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: #fff;
+        }
+
+        nav ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+        }
+
+        nav ul li {
+            margin-left: 1.25rem;
+        }
+
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            transition: color 0.3s ease;
+        }
+
+        nav ul li a:hover {
+            color: #f0f0f0;
+        }
+
+        .hero-profile {
+            background: linear-gradient(to right, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url('hero-profile-bg.jpg') no-repeat center center/cover;
+            color: white;
+            text-align: center;
+            padding: 5rem 1rem;
+            background-size: cover;
+            background-attachment: fixed;
+            position: relative;
+            margin-top: 4rem;
+        }
+
+        .hero-profile h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .profile-content {
+            padding: 2rem 1rem;
+            max-width: 75rem;
+            margin: 0 auto;
+        }
+
+        .profile-info {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+
+        .profile-info img {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            border: 5px solid var(--primary-color);
+            margin-bottom: 1rem;
+        }
+
+        .profile-info h2 {
+            font-size: 2rem;
+            margin: 0.5rem 0;
+        }
+
+        .profile-info p {
+            font-size: 1.2rem;
+            color: #555;
+        }
+
+        .wishlist {
+            margin-top: 2rem;
+        }
+
+        .wishlist-item {
+            background: var(--background-color);
+            border: 1px solid #ddd;
+            border-radius: 0.75rem;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.2);
+        }
+
+        .wishlist-item h3 {
+            margin: 0;
+            color: var(--primary-color);
+        }
+
+        .wishlist-item p {
+            color: #555;
+        }
+
+        .wishlist-item input {
+            width: calc(100% - 1rem);
+            padding: 0.5rem;
+            margin: 0.5rem 0;
+            border-radius: 0.3125rem;
+            border: 1px solid #ddd;
+        }
+
+        .wishlist-item button {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 0.3125rem;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .wishlist-item button:hover {
+            background: var(--secondary-color);
+        }
+
+        .progress-bar {
+            background-color: #e0e0e0;
+            border-radius: 1rem;
+            overflow: hidden;
+            margin: 0.5rem 0;
+            height: 1rem;
+        }
+
+        .progress-bar-inner {
+            height: 100%;
+            background-color: var(--primary-color);
+            text-align: center;
+            white-space: nowrap;
+            color: white;
+            border-radius: 1rem;
+        }
+
+        .progress-info {
+            font-size: 1rem;
+            color: #555;
+            margin: 0.5rem 0;
+        }
+
+        .total-raised {
+            margin: 1rem 0;
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+
+        .achievements {
+            margin-top: 2rem;
+        }
+
+        .achievement-item {
+            background: var(--background-color);
+            border: 1px solid #ddd;
+            border-radius: 0.75rem;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.2);
+        }
+
+        .achievement-item h3 {
+            margin: 0;
+            color: var(--primary-color);
+        }
+
+        .receipts {
+            margin-top: 2rem;
+        }
+
+        .receipt-item {
+            background: var(--background-color);
+            border: 1px solid #ddd;
+            border-radius: 0.75rem;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.2);
+        }
+
+        .receipt-item img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .receipt-item h3 {
+            margin: 0;
+            color: var(--primary-color);
+        }
+
+        .receipt-item p {
+            color: #555;
+        }
+
+        .contact-form {
+            margin-top: 2rem;
+            background: var(--background-color);
+            padding: 2rem;
+            border-radius: 0.75rem;
+            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
+        }
+
+        .contact-form h3 {
+            margin-top: 0;
+            color: var(--primary-color);
+        }
+
+        .contact-form input,
+        .contact-form textarea,
+        .contact-form button {
+            width: 100%;
+            padding: 0.625rem;
+            margin: 0.5rem 0;
+            border-radius: 0.3125rem;
+            border: 1px solid #ddd;
+        }
+
+        .contact-form textarea {
+            resize: vertical;
+        }
+
+        .contact-form button {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .contact-form button:hover {
+            background: var(--secondary-color);
+        }
+
+        footer {
+            background: #343a40;
+            color: white;
+            text-align: center;
+            padding: 1.25rem 0;
+            box-shadow: 0 -0.25rem 0.5rem rgba(0, 0, 0, 0.1);
+        }
+
+        @media (max-width: 48rem) {
+            .profile-info {
+                text-align: left;
+            }
+
+            .profile-info img {
+                width: 100px;
+                height: 100px;
+            }
+
+            .contact-form {
+                padding: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="container">
+            <h1>PawPal Connect</h1>
+            <ul>
+                <li><a href="#hero">Home</a></li>
+                <li><a href="#profile">Profile</a></li>
+                <li><a href="#contact">Contact</a></li>
+                <li><a href="#">Logout</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section id="hero" class="hero-profile">
+        <div class="container">
+            <h1>Hero Profile</h1>
+        </div>
+    </section>
+
+    <section id="profile" class="profile-content">
+        <div class="profile-info">
+            <img src="hero-profile.jpg" alt="Hero Profile Picture">
+            <h2>John Doe</h2>
+            <p>John Doe is a dedicated community member who has made significant contributions to the welfare of street animals. With numerous successful campaigns and a passion for animal rights, John is a true hero in our community.</p>
+        </div>
+
+        <div class="wishlist">
+            <div class="total-raised" id="totalRaised">Total Raised: ₹0</div>
+            <div class="wishlist-item" data-goal="50000" data-raised="15000">
+                <h3>Food for Street Dogs</h3>
+                <p>Help provide nutritious food for street dogs.</p>
+                <div class="progress-bar">
+                    <div class="progress-bar-inner" style="width: 30%;">30%</div>
+                </div>
+                <div class="progress-info">Raised: ₹15,000 / ₹50,000</div>
+                <input type="number" placeholder="Enter amount to donate (₹)" min="1">
+                <button onclick="donate(this)">Donate</button>
+            </div>
+            <div class="wishlist-item" data-goal="30000" data-raised="9000">
+                <h3>Medical Supplies</h3>
+                <p>Support the purchase of essential medical supplies for animals in need.</p>
+                <div class="progress-bar">
+                    <div class="progress-bar-inner" style="width: 30%;">30%</div>
+                </div>
+                <div class="progress-info">Raised: ₹9,000 / ₹30,000</div>
+                <input type="number" placeholder="Enter amount to donate (₹)" min="1">
+                <button onclick="donate(this)">Donate</button>
+            </div>
+            <!-- Add more wishlist items here -->
+        </div>
+
+        <div class="achievements">
+            <h2>Achievements</h2>
+            <div class="achievement-item">
+                <h3>Campaign for Street Dogs</h3>
+                <p>Raised ₹50,000 to provide food and medical care for street dogs.</p>
+            </div>
+            <div class="achievement-item">
+                <h3>Medical Supplies Drive</h3>
+                <p>Collected and distributed essential medical supplies worth ₹30,000.</p>
+            </div>
+            <!-- Add more achievements here -->
+        </div>
+
+        <div class="receipts">
+            <h2>Receipts</h2>
+            <div class="receipt-item">
+                <img src="dog-food-receipt.jpg" alt="Receipt for Dog Food Purchase">
+                <h3>Purchase of Dog Food</h3>
+                <p>Date: 01-Aug-2024</p>
+                <p>Amount Spent: ₹10,000</p>
+                <p>Details: Purchased 500 kg of high-quality dog food for street dogs.</p>
+            </div>
+            <div class="receipt-item">
+                <img src="medical-supplies-receipt.jpg" alt="Receipt for Medical Supplies Purchase">
+                <h3>Medical Supplies Purchase</h3>
+                <p>Date: 05-Aug-2024</p>
+                <p>Amount Spent: ₹5,000</p>
+                <p>Details: Bought essential medical supplies including vaccines and medicines for street animals.</p>
+            </div>
+            <!-- Add more receipt items here -->
+        </div>
+
+        <div class="contact-form">
+            <h3>Contact Hero</h3>
+            <form action="submit_form.php" method="post">
+                <input type="text" name="name" placeholder="Your Name" required>
+                <input type="email" name="email" placeholder="Your Email" required>
+                <textarea name="message" rows="4" placeholder="Your Message" required></textarea>
+                <button type="submit">Send Message</button>
+            </form>
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2024 PawPal Connect. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // Function to update the progress bar and total raised amount
+        function donate(button) {
+            const wishlistItem = button.parentElement;
+            const input = wishlistItem.querySelector('input[type="number"]');
+            const progressBarInner = wishlistItem.querySelector('.progress-bar-inner');
+            const progressInfo = wishlistItem.querySelector('.progress-info');
+            const goal = parseInt(wishlistItem.getAttribute('data-goal'));
+            let raised = parseInt(wishlistItem.getAttribute('data-raised'));
+            const donation = parseInt(input.value);
+
+            if (donation > 0) {
+                raised += donation;
+                wishlistItem.setAttribute('data-raised', raised);
+                const percentage = Math.min((raised / goal) * 100, 100);
+                progressBarInner.style.width = `${percentage}%`;
+                progressBarInner.textContent = `${Math.floor(percentage)}%`;
+
+                // Update progress info
+                progressInfo.textContent = `Raised: ₹${raised} / ₹${goal}`;
+
+                // Update total raised amount
+                const totalRaisedElement = document.getElementById('totalRaised');
+                const totalRaised = parseInt(totalRaisedElement.textContent.replace('Total Raised: ₹', '')) + donation;
+                totalRaisedElement.textContent = `Total Raised: ₹${totalRaised}`;
+
+                // Clear input field
+                input.value = '';
+            }
+        }
+    </script>
+</body>
+</html>

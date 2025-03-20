@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Create or update your profile on PawsPlay. Manage your wishlist and receipts.">
+    <meta name="keywords" content="profile creation, user profile, wishlist, receipts">
+    <title>Create Profile - PawsPlay</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #4caf50; /* Green */
+            --secondary-color: #388e3c; /* Darker green */
+            --text-color-light: #f4f7f9;
+            --text-color-dark: #333;
+            --background-color: #ffffff;
+            --border-color: #e0e0e0;
+            --shadow-color: rgba(0, 0, 0, 0.1);
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            padding: 0;
+            color: var(--text-color-dark);
+            background: #f4f7f9;
+        }
+
+        header {
+            background: var(--primary-color);
+            color: white;
+            padding: 1rem 0;
+            box-shadow: 0 0.25rem 0.5rem var(--shadow-color);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+        }
+
+        nav .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 75rem;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+        }
+
+        nav h1 {
+            margin: 0;
+            font-size: 2.4rem;
+            font-weight: 700;
+        }
+
+        nav ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+        }
+
+        nav ul li {
+            margin-left: 1.5rem;
+        }
+
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        nav ul li a:hover {
+            color: #e0e0e0;
+        }
+
+        .hero-profile {
+            background: linear-gradient(to right, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url('profile-bg.jpg') no-repeat center center/cover;
+            color: white;
+            text-align: center;
+            padding: 6rem 1.5rem;
+            background-size: cover;
+            background-attachment: fixed;
+            margin-top: 4rem;
+        }
+
+        .hero-profile h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            font-weight: 700;
+        }
+
+        .profile-content {
+            padding: 2rem;
+            max-width: 75rem;
+            margin: 0 auto;
+            background: var(--background-color);
+            border-radius: 0.75rem;
+            box-shadow: 0 0.5rem 1rem var(--shadow-color);
+        }
+
+        .profile-info, .profile-form, .funds-request-form, .previous-funds-form {
+            margin-bottom: 2rem;
+            padding: 2rem;
+            background: #ffffff;
+            border-radius: 0.5rem;
+            box-shadow: 0 0.25rem 0.5rem var(--shadow-color);
+        }
+
+        .profile-info img {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            border: 5px solid var(--primary-color);
+            display: block;
+            margin: 0 auto 1rem;
+        }
+
+        .profile-info h2 {
+            font-size: 2rem;
+            margin: 0.5rem 0;
+            font-weight: 500;
+        }
+
+        .profile-info p {
+            font-size: 1.1rem;
+            color: #555;
+        }
+
+        .profile-form input,
+        .profile-form textarea,
+        .profile-form button,
+        .funds-request-form input,
+        .funds-request-form textarea,
+        .funds-request-form button {
+            width: 100%;
+            padding: 0.75rem;
+            margin: 0.5rem 0;
+            border-radius: 0.5rem;
+            border: 1px solid var(--border-color);
+            box-sizing: border-box;
+        }
+
+        .profile-form textarea,
+        .funds-request-form textarea {
+            resize: vertical;
+        }
+
+        .profile-form button,
+        .funds-request-form button {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            cursor: pointer;
+            transition: background 0.3s ease;
+            padding: 0.75rem;
+            font-size: 1rem;
+        }
+
+        .profile-form button:hover,
+        .funds-request-form button:hover {
+            background: var(--secondary-color);
+        }
+
+        .upload-btn {
+            margin: 1rem 0;
+            text-align: center;
+        }
+
+        .upload-btn input[type="file"] {
+            display: none;
+        }
+
+        .upload-btn label {
+            display: inline-block;
+            background: var(--primary-color);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            transition: background 0.3s ease;
+            font-size: 1rem;
+        }
+
+        .upload-btn label:hover {
+            background: var(--secondary-color);
+        }
+
+        .receipt-dropdown {
+            display: none;
+            background: #f1f1f1;
+            padding: 1rem;
+            margin-top: 0.5rem;
+            border-radius: 0.5rem;
+            box-shadow: 0 0.25rem 0.5rem var(--shadow-color);
+        }
+
+        .receipt-dropdown.show {
+            display: block;
+        }
+
+        .funds-history-item {
+            margin-bottom: 1rem;
+            padding: 1rem;
+            background: #ffffff;
+            border-radius: 0.5rem;
+            box-shadow: 0 0.25rem 0.5rem var(--shadow-color);
+        }
+
+        .funds-history-item button {
+            background: var(--primary-color);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background 0.3s ease;
+        }
+
+        .funds-history-item button:hover {
+            background: var(--secondary-color);
+        }
+
+        .funds-request-form input[type="file"] {
+            display: none;
+        }
+
+        .funds-request-form label {
+            display: block;
+            margin: 1rem 0 0.5rem;
+        }
+
+        .funds-request-form input[type="file"] + label {
+            cursor: pointer;
+            background: var(--primary-color);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            transition: background 0.3s ease;
+        }
+
+        .funds-request-form input[type="file"]:hover + label {
+            background: var(--secondary-color);
+        }
+
+        .submit-photo-btn {
+    display: inline-block;
+    margin: 1rem auto;
+    padding: 0.5rem;
+    background: var(--primary-color);
+    color: white;
+    border-radius: 0.25rem;
+    cursor: pointer;
+    font-size: 1rem; /* Match the text size */
+    transition: background 0.3s ease;
+    width: auto; /* Auto width to fit the content */
+    height: auto; /* Auto height to fit the content */
+    text-align: center;
+    line-height: normal;
+    border: 1px solid var(--primary-color); /* Border for better visibility */
+}
+
+.submit-photo-btn:hover {
+    background: var(--secondary-color);
+}
+
+
+
+        footer {
+            background: #343a40;
+            color: white;
+            text-align: center;
+            padding: 1.5rem 0;
+            box-shadow: 0 -0.25rem 0.5rem var(--shadow-color);
+        }
+
+        @media (max-width: 48rem) {
+            .profile-info img {
+                width: 100px;
+                height: 100px;
+            }
+
+            .hero-profile h1 {
+                font-size: 2.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="container">
+            <h1>PawsPlay</h1>
+            <ul>
+                <li><a href="#profile">Profile</a></li>
+                <li><a href="#contact">Contact</a></li>
+                <li><a href="#">Logout</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section class="hero-profile">
+        <h1>Welcome to PawsPlay</h1>
+        <p>Connecting people who want to help animals in need.</p>
+    </section>
+
+    <section class="profile-content">
+        <div class="profile-info">
+            <img src="profile.jpg" alt="Profile Picture">
+            <h2>John Doe</h2>
+            <p>Animal Lover & Activist</p>
+        </div>
+
+        <div class="profile-form">
+            <h2>Upload Profile Picture</h2>
+            <div class="upload-btn">
+                <input type="file" id="profilePic" accept="image/*">
+                <label for="profilePic">Choose Image</label>
+            </div>
+        </div>
+
+        <div class="funds-request-form">
+            <h2>Add Request for Funds</h2>
+            <form>
+                <label for="donationPurpose">Donation Purpose</label>
+                <textarea id="donationPurpose" placeholder="Donation purpose for this request" rows="4"></textarea>
+
+                <label for="animalPhoto">Photo of the Animal</label>
+                <input type="file" id="animalPhoto" accept="image/*">
+                <button type="button" class="submit-photo-btn">Submit</button>
+
+
+                <label for="itemDescription">Item Description</label>
+                <textarea id="itemDescription" placeholder="Describe the items needed..." rows="4"></textarea>
+
+                <label for="link">Link</label>
+                <input type="url" id="link" placeholder="Provide relevant link to the cause">
+
+                <button type="submit">Submit Fund Request</button>
+            </form>
+        </div>
+
+        <div class="previous-funds-form">
+            <h2>Show History of Previous Funds</h2>
+            <div id="fundsHistory">
+                <div class="funds-history-item">
+                    <h3>Request 1</h3>
+                    <p>Donation Purpose: Help for animal shelter</p>
+                    <button class="show-receipt">Show Receipt</button>
+                    <div class="receipt-dropdown">
+                        <p>Receipt: <a href="#">View Receipt</a></p>
+                    </div>
+                </div>
+                <div class="funds-history-item">
+                    <h3>Request 2</h3>
+                    <p>Donation Purpose: Medicines for stray dog</p>
+                    <button class="show-receipt">Show Receipt</button>
+                    <div class="receipt-dropdown">
+                        <p>Receipt: <a href="#">View Receipt</a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2025 PawsPlay. All rights reserved.</p>
+    </footer>
+
+    <script>
+        document.querySelectorAll('.show-receipt').forEach(button => {
+            button.addEventListener('click', () => {
+                const dropdown = button.nextElementSibling;
+                dropdown.classList.toggle('show');
+            });
+        });
+    </script>
+</body>
+</html>

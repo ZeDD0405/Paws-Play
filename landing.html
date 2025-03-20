@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Help poor animals get the shelter and food they need through donations.">
+    <meta name="keywords" content="donation, animals, shelter, food, charity">
+    <title>Animal Aid - Help Us Help Them</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: lightgreen;
+            --secondary-color: black;
+            --background-color: #f5f5f5;
+            --text-color-dark: #333;
+            --text-color-light: #fff;
+            --hover-color: lightgreen;
+            --shadow-color: rgba(0, 0, 0, 0.3);
+            --transition-speed: 0.4s;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--background-color);
+            color: var(--text-color-dark);
+        }zxc v
+
+        header {
+            background-color: var(--primary-color);
+            padding: 1rem;
+            text-align: center;
+            color: var(--text-color-light);
+            box-shadow: 0 4px 6px var(--shadow-color);
+            transition: background-color var(--transition-speed) ease, transform var(--transition-speed) ease;
+        }
+
+        header{
+            background-color: var(--hover-color);
+            transform: scale(1.05);
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 2.5rem;
+        }
+
+        .hero {
+            text-align: center;
+            padding: 6rem 2rem;
+            background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url('/golden-retriever-puppy-relaxing-on-white-cat-web-header.jpg') no-repeat center center/cover;
+            color: var(--text-color-light);
+            box-shadow: 0 4px 8px var(--shadow-color);
+            transition: background-position 1s ease, box-shadow var(--transition-speed) ease;
+        }
+
+        .hero:hover {
+            background-position: center top;
+            box-shadow: 0 8px 16px var(--shadow-color);
+        }
+
+        .hero h2 {
+            font-size: 3.5rem;
+            margin-bottom: 1.5rem;
+            transition: transform var(--transition-speed) ease, color var(--transition-speed) ease;
+        }
+
+        .hero h2:hover {
+            transform: scale(1.1);
+            color: var(--hover-color);
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            transition: color var(--transition-speed) ease;
+        }
+
+        .cta-button {
+            background-color: var(--primary-color);
+            color: var(--text-color-light);
+            padding: 1rem 2rem;
+            text-decoration: none;
+            border-radius: 50px;
+            font-size: 1.2rem;
+            transition: background-color var(--transition-speed) ease, transform var(--transition-speed) ease;
+            box-shadow: 0 6px 12px var(--shadow-color);
+        }
+
+        .cta-button:hover {
+            background-color: var(--hover-color);
+            transform: translateY(-8px);
+        }
+
+        .section {
+            padding: 4rem 2rem;
+            text-align: center;
+        }
+
+        .section:nth-of-type(even) {
+            background-color: #fff;
+        }
+
+        .section h2 {
+            color: var(--primary-color);
+            margin-bottom: 2rem;
+            font-size: 2.5rem;
+            transition: color var(--transition-speed) ease;
+        }
+
+        .section h2:hover {
+            color: var(--hover-color);
+        }
+
+        .mission-section {
+            background-color: #f9f9f9;
+            padding: 2rem 2rem;
+        }
+
+        .mission-section p {
+            font-size: 1.2rem;
+            max-width: 800px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        .mission-section:hover p {
+            color: var(--hover-color);
+        }
+
+        .mission-section img {
+            width: 100%;
+            max-width: 300px;
+            margin-top: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px var(--shadow-color);
+        }
+
+        .card {
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px var(--shadow-color);
+            overflow: hidden;
+            margin: 1rem 0;
+            padding: 1.5rem;
+            text-align: left;
+            transition: transform var(--transition-speed) ease, box-shadow var(--transition-speed) ease;
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 8px 16px var(--shadow-color);
+        }
+
+        .card h3 {
+            margin: 0 0 1rem 0;
+            font-size: 1.5rem;
+            transition: color var(--transition-speed) ease;
+        }
+
+        .card h3:hover {
+            color: var(--hover-color);
+        }
+
+        footer {
+            background-color: var(--primary-color);
+            padding: 1.5rem;
+            text-align: center;
+            color: var(--text-color-light);
+            box-shadow: 0 -4px 6px var(--shadow-color);
+            transition: background-color var(--transition-speed) ease, transform var(--transition-speed) ease;
+        }
+
+        footer:hover {
+            background-color: var(--hover-color);
+            transform: scale(1.02);
+        }
+
+        footer p {
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>         <li>  PAWSPLAY</li></h1>
+</header>
+
+<section class="hero">
+    <h2>Help Us Help Them</h2>
+    <p>Your donation can make a huge difference in the lives of animals in need.</p>
+    <a href="login.html" class="cta-button">Get Started</a>
+</section>
+
+<section class="section mission-section">
+    <h2>Our Mission</h2>
+    <p>We are dedicated to rescuing and rehabilitating abandoned, sick, and injured animals. With the help of generous donations, we provide them with the care, shelter, and love they deserve. Our goal is to ensure no animal suffers alone. Every contribution helps us provide food, shelter, and medical assistance to animals in need. Together, we can make a difference.</p>
+    <img src="/help.jpg" alt="Animals being helped">
+</section>
+
+<section class="section">
+    <h2>Featured Success Stories</h2>
+    <div class="card">
+        <h3>Charlie the Dog</h3>
+        <p>Charlie was rescued from the streets and with the help of donations, he got the medical care he needed. Today, he's healthy and adopted by a loving family!</p>
+    </div>
+    <div class="card">
+        <h3>Milo the Kitten</h3>
+        <p>Milo was abandoned as a kitten, but with your donations, we were able to provide shelter and find him a new home.</p>
+    </div>
+    <div class="card">
+        <h3>Sunny the Horse</h3>
+        <p>Sunny was saved from a neglected farm. Thanks to generous donations, he was treated for injuries and now lives peacefully in a sanctuary.</p>
+    </div>
+</section>
+
+<footer>
+    <p>&copy; 2024 Animal Aid. All rights reserved.</p>
+</footer>
+
+</body>
+</html>

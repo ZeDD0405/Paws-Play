@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="PawPal Connect: Help street animals by donating needed items and see the impact you make.">
+    <meta name="keywords" content="donate, animals, charity, crowdfunding, street animals">
+    <title>PawsPlay</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: lightgreen;
+            --secondary-color: black;
+            --background-color: #f5f5f5;
+            --text-color-dark: #333;
+            --text-color-light: #fff;
+            --hover-color: lightgreen;
+            --shadow-color: rgba(0, 0, 0, 0.3);
+            --transition-speed: 0.4s;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: var(--background-color);
+            color: var(--text-color-dark);
+            line-height: 1.6;
+        }
+
+        header {
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            color: var(--text-color-light);
+            padding: 1rem 2rem;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+            box-shadow: 0 4px 8px var(--shadow-color);
+            transition: background var(--transition-speed), box-shadow var(--transition-speed);
+        }
+
+        header.scrolled {
+            background: var(--primary-color);
+            box-shadow: 0 6px 12px var(--shadow-color);
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        nav h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            margin: 0;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            margin: 0;
+            padding: 0;
+        }
+
+        nav ul li {
+            margin-left: 2rem;
+            position: relative;
+        }
+
+        nav ul li a {
+            color: var(--text-color-light);
+            text-decoration: none;
+            font-weight: 700;
+            transition: color var(--transition-speed), transform var(--transition-speed);
+            position: relative;
+            padding-bottom: 5px;
+        }
+
+        nav ul li a::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 100%;
+            height: 3px;
+            background: var(--secondary-color);
+            transform: scaleX(0);
+            transition: transform var(--transition-speed);
+            transform-origin: bottom right;
+        }
+
+        nav ul li a:hover::after {
+            transform: scaleX(1);
+            transform-origin: bottom left;
+        }
+
+        .hero {
+            background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('cat.webp') no-repeat center center/cover;
+            color: var(--text-color-light);
+            text-align: center;
+            padding: 10rem 2rem;
+            position: relative;
+            height: 80vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            overflow: hidden;
+            animation: fadeIn 1.5s ease-out;
+        }
+
+        .hero h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            text-shadow: 3px 3px 6px rgba(0,0,0,0.7);
+            letter-spacing: 1px;
+            opacity: 0;
+            animation: fadeInText 1.5s ease-out forwards;
+        }
+
+        .cta-button {
+            background: var(--secondary-color);
+            color: var(--text-color-light);
+            padding: 0.75rem 2rem;
+            text-decoration: none;
+            border-radius: 30px;
+            font-size: 1.2rem;
+            font-weight: 700;
+            transition: background var(--transition-speed), transform var(--transition-speed), box-shadow var(--transition-speed);
+            box-shadow: 0 4px 8px var(--shadow-color);
+        }
+
+        .cta-button:hover {
+            background: var(--hover-color);
+            transform: scale(1.05);
+            box-shadow: 0 6px 12px var(--shadow-color);
+        }
+
+        .section {
+            padding: 4rem 2rem;
+            text-align: center;
+            background: var(--text-color-light);
+            margin-top: -4rem;
+            position: relative;
+            z-index: 1;
+            box-shadow: 0 4px 8px var(--shadow-color);
+            transition: background var(--transition-speed);
+        }
+            .gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+}
+
+.gallery-grid img {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px var(--shadow-color);
+    transition: transform 0.3s ease;
+}
+
+.gallery-grid img:hover {
+    transform: scale(1.05);
+}
+
+        .section:nth-of-type(even) {
+            background: var(--background-color);
+        }
+
+        .section h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 3rem;
+            color: var(--primary-color);
+            margin-bottom: 2rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            opacity: 0;
+            animation: fadeInText 1.5s ease-out forwards;
+        }
+
+        .card {
+            background: var(--text-color-light);
+            border-radius: 12px;
+            box-shadow: 0 6px 12px var(--shadow-color);
+            overflow: hidden;
+            margin-bottom: 2rem;
+            transition: transform var(--transition-speed), box-shadow var(--transition-speed);
+            position: relative;
+        }
+
+        .card img {
+            width: 50%;
+            height: auto;
+            transition: transform var(--transition-speed);
+        }
+
+        .card:hover img {
+            transform: scale(1.1);
+        }
+
+        .card-content {
+            padding: 1.5rem;
+            text-align: left;
+            opacity: 1;
+            transform: translateY(0);
+            transition: opacity var(--transition-speed), transform var(--transition-speed);
+        }
+
+        .card-content h3, 
+        .card-content p {
+            margin: 0;
+            transition: transform var(--transition-speed), opacity var(--transition-speed);
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 12px 24px var(--shadow-color);
+        }
+
+        .card:hover .card-content {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .card:hover .card-content h3,
+        .card:hover .card-content p {
+            transform: translateY(10px);
+            opacity: 1;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+
+        footer {
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            color: var(--text-color-light);
+            padding: 1rem 2rem;
+            text-align: center;
+            position: relative;
+            box-shadow: 0 -4px 8px var(--shadow-color);
+            margin-top: 2rem;
+        }
+
+        footer p {
+            margin: 0;
+            font-size: 1rem;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes fadeInText {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        /* Dark mode styles */
+.dark-mode {
+    --background-color: #121212;
+    --text-color-dark: #e0e0e0;
+    --text-color-light: #ffffff;
+    --primary-color: #1db954; /* Spotify green for dark mode */
+    --secondary-color: #282828; /* Dark grey */
+    --hover-color: #1ed760; /* Slightly lighter green for hover */
+}
+
+nav ul li .verify-btn {
+    background: var(--primary-color);
+    color: var(--text-color-light);
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    text-decoration: none;
+    font-weight: 700;
+    transition: background var(--transition-speed), transform var(--transition-speed), box-shadow var(--transition-speed);
+    box-shadow: 0 4px 8px var(--shadow-color);
+    display: inline-block;
+}
+
+nav ul li .verify-btn:hover {
+    background: var(--hover-color);
+    transform: scale(1.05);
+    box-shadow: 0 6px 12px var(--shadow-color);
+}
+ 
+body.dark-mode {
+    background: var(--background-color);
+    color: var(--text-color-dark);
+}
+
+header.dark-mode {
+    background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+    box-shadow: 0 4px 8px var(--shadow-color);
+}
+
+.hero.dark-mode {
+    background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('cat.webp') no-repeat center center/cover;
+    color: var(--text-color-light);
+}
+
+.section.dark-mode {
+    background: var(--secondary-color);
+    color: var(--text-color-light);
+}
+
+.card.dark-mode {
+    background: var(--secondary-color);
+    color: var(--text-color-light);
+}
+
+.card img {
+    filter: brightness(80%);
+}
+
+footer.dark-mode {
+    background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+}
+
+/* Accessibility section styles */
+.accessibility-section {
+    background: var(--background-color);
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px var(--shadow-color);
+    text-align: center;
+    margin: 2rem auto;
+    max-width: 600px;
+}
+
+.accessibility-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.accessibility-button {
+    background: var(--primary-color);
+    color: var(--text-color-light);
+    border: none;
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+    font-weight: 700;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: background var(--transition-speed), transform var(--transition-speed);
+    outline: none;
+}
+
+.accessibility-button:hover {
+    background: var(--hover-color);
+    transform: scale(1.05);
+}
+
+.accessibility-button.increase {
+    background: #4CAF50; /* Green */
+}
+
+.accessibility-button.decrease {
+    background: #FFC107; /* Amber */
+}
+
+.accessibility-button.dark-mode {
+    background: #F44336; /* Red */
+}
+
+    </style>
+</head>
+<body>
+    
+    <header id="header">
+        <nav>
+            <h1>PawsPlay</h1>
+            <ul>
+                <li><a href="#how-it-works">How It Works</a></li>
+                <li><a href="#success-stories">Success Stories</a></li>
+                <li><a href="#featured-profiles">Featured Profiles</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+    <section class="hero">
+        <div>
+            <h2>Help Street Animals, One Donation at a Time</h2>
+            <a href="#how-it-works" class="cta-button">Learn More</a>
+        </div>
+    </section>
+    <section id="how-it-works" class="section">
+        <h2>How It Works</h2>
+        <div class="grid">
+            <div class="card">
+                <img src="/a1.png" alt="Find a Request">
+                <div class="card-content">
+                    <h3>Find a Request</h3>
+                    <p>Browse the list of items needed by street animals and choose what to help with.</p>
+                </div>
+            </div>
+            <div class="card">
+                <img src="/donate.png" alt="Make a Donation">
+                <div class="card-content">
+                    <h3>Make a Donation</h3>
+                    <p>Choose the item you want to donate and complete the process through our secure platform.</p>
+                </div>
+            </div>
+            <div class="card">
+                <img src="/seechange-removebg-preview.png" alt="See the Impact">
+                <div class="card-content">
+                    <h3>See the Impact</h3>
+                    <p>Track the progress of your donation and witness the positive changes you’ve helped create.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section id="success-stories" class="section">
+        <h2>Success Stories</h2>
+        <div class="grid">
+            <div class="card">
+                <img src="/desktop-home-dog-hero-2x.jpg" alt="Success Story 1">
+                <div class="card-content">
+                    <h3>Max's New Home</h3>
+                    <p>Thanks to your donations, Max now has a warm bed and plenty of food. He’s thriving in his new environment!</p>
+                </div>
+            </div>
+            <div class="card">
+                <img src="/happy-cat.jpg" alt="Success Story 2">
+                <div class="card-content">
+                    <h3>Luna's Recovery</h3>
+                    <p>Luna received the medical treatment she needed and is on her way to a full recovery. Your support made this possible!</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section id="featured-profiles" class="section">
+        <h2>Featured Profiles</h2>
+        <div class="grid">
+            <div class="card">
+                <a href="profile.html">
+                    <img src="profile1.jpg" alt="Profile 1">
+                    <div class="card-content">
+                        <h3>Jane Doe</h3>
+                        <p>Jane has been helping street animals for over a decade. She specializes in rescuing and rehabilitating injured animals.</p>
+                    </div>
+                </a>
+            </div>
+            <div class="card">
+                <a href="profile.html">
+                    <img src="profile2.jpg" alt="Profile 2">
+                    <div class="card-content">
+                        <h3>John Smith</h3>
+                        <p>John runs a small shelter that focuses on finding homes for stray cats and dogs. His dedication has saved countless lives.</p>
+                    </div>
+                </a>
+            </div>
+            <div class="card">
+                <a href="profile.html">
+                    <img src="profile3.jpg" alt="Profile 3">
+                    <div class="card-content">
+                        <h3>Emily Johnson</h3>
+                        <p>Emily's passion is feeding and providing medical care for street animals. Her efforts have improved the lives of many animals in her community.</p>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </section>
+    <section id="faq" class="section">
+        <h2>Frequently Asked Questions</h2>
+        <div class="faq-item">
+            <h3>How can I donate?</h3>
+            <p>Donations can be made through our secure platform by selecting an item from the list and following the instructions.</p>
+        </div>
+        <div class="faq-item">
+            <h3>Where does my donation go?</h3>
+            <p>Your donation directly supports street animals in need, providing them with food, medical care, and other essentials.</p>
+        </div>
+    </section>
+    <section id="accessibility" class="section accessibility-section">
+        <script>
+            function toggleDarkMode() {
+                document.body.classList.toggle('dark-mode');
+                document.querySelector('header').classList.toggle('dark-mode');
+                document.querySelector('.hero').classList.toggle('dark-mode');
+                document.querySelectorAll('.section').forEach(section => section.classList.toggle('dark-mode'));
+                document.querySelectorAll('.card').forEach(card => card.classList.toggle('dark-mode'));
+                document.querySelector('footer').classList.toggle('dark-mode');
+            }
+        </script>
+        <h2>Accessibility Options</h2>
+        <div class="accessibility-buttons">
+            <button onclick="toggleDarkMode()" class="accessibility-button dark-mode">Toggle Dark Mode</button>
+        </div>
+    </section>
+    
+    <footer>
+        <p>&copy; 2024 PawsPlay. All Rights Reserved.</p>
+    </footer>
+    <script>
+        
+        document.querySelectorAll('nav ul li a').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+       
+        window.addEventListener('scroll', () => {
+            const header = document.getElementById('header');
+            if (window.scrollY > 50) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+        });
+    </script>
+    
+    
+    
+    <a href="#" id="back-to-top" class="cta-button">Back to Top</a>
+
+<style>
+    #back-to-top {
+        position: fixed;
+        bottom: 1rem;
+        right: 1rem;
+        display: none;
+        opacity: 0;
+        transition: opacity 1s ease, transform 1s ease;
+        transform: translateY(10px);
+    }
+
+    #back-to-top.show {
+        display: block;
+        opacity: 1;
+        transform: translateY(0);
+    }
+</style>
+
+<script>
+    const backToTopButton = document.getElementById('back-to-top');
+
+    window.addEventListener('scroll', () => {
+        if (window.scrollY > 300) {
+            backToTopButton.classList.add('show');
+        } else {
+            backToTopButton.classList.remove('show');
+        }
+    });
+</script>
+
+</body>
+</html>
