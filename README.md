@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # OTP Verification Email Template
 
 This repository contains an OTP (One-Time Password) verification email template built with HTML and CSS. The template provides a secure and user-friendly way of verifying user identity during the login process.
@@ -37,3 +38,6 @@ This OTP verification email template is inspired by the designs available on Oco
 ## License
 
 This project is licensed under the [MIT License](LICENSE).
+=======
+# Paws-Play
+>>>>>>> c6e3108402d65db2457f08553dd7feeca66398cc
