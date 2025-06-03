@@ -9,12 +9,25 @@
             font-family: Arial, sans-serif;
             text-align: center;
             margin-top: 50px;
+            background-color: #f5f5f5;
+        }
+
+        .container {
+            max-width: 400px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
         }
 
         input {
             margin: 10px;
             padding: 10px;
             font-size: 1rem;
+            width: 80%;
+            border: 1px solid #ddd;
+            border-radius: 5px;
         }
 
         button {
@@ -25,37 +38,85 @@
             border: none;
             border-radius: 5px;
             cursor: pointer;
+            width: 85%;
+            margin-top: 10px;
         }
 
         button:hover {
             background-color: #57B894;
         }
+
+        .error {
+            color: #ff4444;
+            margin: 10px 0;
+        }
+
+        .success {
+            color: #00C851;
+            margin: 10px 0;
+        }
     </style>
 </head>
 <body>
-    <h2>Verify OTP</h2>
-    <form id="otpForm">
-        <input type="text" name="otp" placeholder="Enter OTP" required><br>
-        <button type="submit">Verify OTP</button>
-    </form>
+    <div class="container">
+        <h2>Verify OTP</h2>
+        <p>Please enter the OTP sent to your email</p>
+        <form id="otpForm">
+            <input type="email" id="email" name="email" placeholder="Enter your email" required><br>
+            <input type="text" name="otp" placeholder="Enter OTP" required pattern="[0-9]{6}" title="Please enter 6 digit OTP"><br>
+            <button type="submit">Verify OTP</button>
+        </form>
+        <div id="message"></div>
+    </div>
 
     <script>
+        // Get email from URL parameters if available
+        const urlParams = new URLSearchParams(window.location.search);
+        const emailFromUrl = urlParams.get('email');
+        if (emailFromUrl) {
+            document.getElementById('email').value = emailFromUrl;
+        }
+
         const form = document.getElementById('otpForm');
+        const messageDiv = document.getElementById('message');
 
         form.addEventListener('submit', async (e) => {
             e.preventDefault();
+            
+            try {
+                const email = form.email.value;
+                const otp = form.otp.value;
 
-            const email = form.email.value;
-            const otp = form.otp.value;
+                if (!email || !otp) {
+                    throw new Error('Please fill in all fields');
+                }
 
-            const response = await fetch('http://localhost:5000/api/users/verify-otp', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ email, otp }),
-            });
+                messageDiv.className = '';
+                messageDiv.textContent = 'Verifying...';
 
-            const data = await response.json();
-            alert(data.message);
+                const response = await fetch('http://localhost:5000/api/users/verify-otp', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, otp }),
+                });
+
+                const data = await response.json();
+                
+                if (data.success) {
+                    messageDiv.className = 'success';
+                    messageDiv.textContent = data.msg;
+                    // Redirect to web page after successful verification
+                    setTimeout(() => {
+                        window.location.href = 'web.html';
+                    }, 2000);
+                } else {
+                    messageDiv.className = 'error';
+                    messageDiv.textContent = data.msg || 'Verification failed. Please try again.';
+                }
+            } catch (error) {
+                messageDiv.className = 'error';
+                messageDiv.textContent = error.message || 'Something went wrong. Please try again.';
+            }
         });
     </script>
 </body>

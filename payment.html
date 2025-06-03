@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment - PawsPlay</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .fund-request-card {
+            background-color: #fff;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .fund-request-card img {
+            width: 100%;
+            max-height: 300px;
+            object-fit: cover;
+            border-radius: 4px;
+            margin-bottom: 15px;
+        }
+        .fund-request-card h2 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+        .fund-request-card p {
+            color: #666;
+            margin-bottom: 10px;
+        }
+        .progress-bar {
+            width: 100%;
+            height: 20px;
+            background-color: #f0f0f0;
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 10px 0;
+        }
+        .progress {
+            height: 100%;
+            background-color: #4CAF50;
+            transition: width 0.3s ease;
+        }
+        .amount-info {
+            display: flex;
+            justify-content: space-between;
+            margin: 10px 0;
+            color: #666;
+        }
+        .qr-section {
+            text-align: center;
+            margin-top: 20px;
+            padding: 20px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+        }
+        .qr-section h3 {
+            color: #333;
+            margin-bottom: 15px;
+        }
+        .qr-code {
+            max-width: 200px;
+            margin: 0 auto;
+        }
+        .qr-code img {
+            width: 100%;
+            height: auto;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 10px;
+        }
+        .hero-info {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid #eee;
+        }
+        .hero-info p {
+            margin: 5px 0;
+            color: #666;
+        }
+        .error-message {
+            color: #ff4444;
+            text-align: center;
+            padding: 20px;
+            background-color: #ffebee;
+            border-radius: 8px;
+            margin: 20px 0;
+            display: none;
+        }
+        .loading {
+            text-align: center;
+            padding: 20px;
+            color: #666;
+        }
+        .green-style {
+            background-color: rgba(76, 175, 80, 0.95);
+            color: white; /* Optional: Makes text readable on the green background */
+            padding: 10px;
+            border-radius: 5px;
+            text-align: center;
+            font-weight: bold;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Optional: Adds a shadow effect */
+        }
+        .featured-card {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .verified-receipts {
+            margin-top: 2rem;
+            padding: 1rem;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+        .verified-receipts h3 {
+            color: #333;
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+        }
+        .receipts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+        .receipt-item {
+            background: white;
+            padding: 1rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .receipt-item img {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 4px;
+        }
+        .receipt-item p {
+            margin: 0.5rem 0;
+            font-size: 0.9rem;
+            color: #666;
+        }
+        .receipt-item .verified-badge {
+            display: inline-block;
+            padding: 0.25rem 0.5rem;
+            background: #4CAF50;
+            color: white;
+            border-radius: 4px;
+            font-size: 0.8rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div id="loadingMessage" class="loading">Loading fund request details...</div>
+        <div id="errorMessage" class="error-message"></div>
+        
+        <div id="fundRequestContent" style="display: none;">
+            <div class="fund-request-card">
+                <img id="animalPhoto" src="" alt="Animal Photo" onerror="this.src='https://placehold.co/400x300?text=No+Image'">
+                <div class="card-content">
+                    <h2 id="donationPurpose"></h2>
+                    <p id="itemDescription"></p>
+                    <div class="progress-bar">
+                        <div class="progress" id="progressBar"></div>
+                    </div>
+                    <div class="amount-info">
+                        <span>Raised: ₹<span id="amountRaised">0</span></span>
+                        <span>Goal: ₹<span id="amountRequested">0</span></span>
+                    </div>
+                    <div class="hero-info">
+                        <p>Hero: <span id="heroName"></span></p>
+                        <p>Location: <span id="location"></span></p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="qr-section">
+                <h3>Scan QR Code to Donate</h3>
+                <div class="qr-code">
+                    <img id="qrCode" src="" alt="QR Code" onerror="this.src='https://placehold.co/300x300?text=QR+Code'">
+                </div>
+            </div>
+        </div>
+    </div>
+    <form method="POST" action="/upload-payment" enctype="multipart/form-data" id="paymentUploadForm">
+        <div style="margin-bottom: 20px;">
+            <label for="paymentScreenshot" style="font-weight: bold;">Upload Screenshot: <span style="color: red;">*</span></label>
+            <input type="file" id="paymentScreenshot" name="paymentScreenshot" required style="display: block; width: 100%; margin-top: 8px;" />
+        </div>
+        <button type="submit" style="background-color: #4CAF50; color: white; width: 100%; padding: 12px; border: none; border-radius: 5px; font-size: 18px; cursor: pointer;">
+            Upload Screenshot
+        </button>
+    </form>
+    <div id="uploadSuccessMessage" style="color: green; display: none; margin-top: 10px;">Screenshot uploaded successfully!</div>
+    <div id="uploadErrorMessage" style="color: red; display: none; margin-top: 10px;">Failed to upload screenshot. Please try again.</div>
+      
+    <script>
+  // Remove the form's submit event listener
+document.getElementById("paymentUploadForm").addEventListener("submit", function (event) {
+    event.preventDefault(); // Prevent the form from submitting immediately
+
+    const fileInput = document.getElementById('paymentScreenshot');
+    const file = fileInput.files[0];
+
+    if (!file) {
+        alert('Please select a file to upload.');
+        return;
+    }
+
+    const userEmail = localStorage.getItem('userEmail'); // Retrieve the donor's email
+    const userRole = localStorage.getItem('userRole'); // Retrieve the donor's role
+    const donationPurpose = document.getElementById('donationPurpose').value; // Retrieve the donation purpose
+
+
+    const formData = new FormData();
+    formData.append('paymentScreenshot', file);
+    formData.append('userEmail', userEmail); // Pass the donor's email
+    formData.append('userRole', userRole); // Pass the donor's role
+    formData.append('donationPurpose', donationPurpose); // Pass the donation purpose
+
+    try {
+        const response = await fetch('http://localhost:5000/api/upload-payment', {
+            method: 'POST',
+            body: formData
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+           // alert('Receipt uploaded successfully!');
+        } else {
+            throw new Error(result.message || 'Upload failed');
+        }
+    } catch (error) {
+        console.error('Error uploading receipt:', error);
+        alert('An error occurred while uploading the receipt.');
+    }
+});
+    </script>
+    <script>
+        // Prevent the form from submitting directly
+document.getElementById("paymentUploadForm").addEventListener("submit", function (event) {
+    event.preventDefault(); // Prevent the form from submitting immediately
+
+    // Show the modal to ask for the purpose
+    const purposeModal = document.getElementById("purposeModal");
+    purposeModal.style.display = "flex";
+});
+
+// Handle the Confirm button in the modal
+document.getElementById("submitPurposeButton").onclick = async function () {
+    const purposeInput = document.getElementById("purposeInput").value.trim();
+    const purposeError = document.getElementById("purposeError");
+
+    if (!purposeInput) {
+        purposeError.style.display = "block"; // Show error if purpose is empty
+        return;
+    }
+
+    purposeError.style.display = "none"; // Hide error
+    document.getElementById("purposeModal").style.display = "none"; // Hide the modal
+
+    // Proceed with the receipt upload
+    const fileInput = document.getElementById("paymentScreenshot");
+    const file = fileInput.files[0];
+    const userEmail = localStorage.getItem("userEmail"); // Retrieve the donor's email
+    const userRole = localStorage.getItem("userRole"); // Retrieve the donor's role
+
+    if (!file || !userEmail) {
+        alert("Please select a file and ensure you are logged in.");
+        return;
+    }
+
+    const formData = new FormData();
+    formData.append("paymentScreenshot", file);
+    formData.append("userEmail", userEmail);
+    formData.append("userRole", userRole);
+    formData.append("donationPurpose", purposeInput);
+
+    try {
+        const response = await fetch("http://localhost:5000/api/upload-payment", {
+            method: "POST",
+            body: formData,
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+            alert("Receipt uploaded successfully!");
+            document.getElementById("uploadSuccessMessage").style.display = "block";
+        } else {
+            throw new Error(result.message || "Upload failed");
+        }
+    } catch (error) {
+        console.error("Error uploading receipt:", error);
+        alert("An error occurred while uploading the receipt.");
+        document.getElementById("uploadErrorMessage").style.display = "block";
+    }
+};
+
+// Handle the Cancel button in the modal
+document.getElementById("cancelPurposeButton").onclick = function () {
+    document.getElementById("purposeModal").style.display = "none"; // Hide the modal
+};
+    </script>
+    <script>
+        // Get the fund request ID from URL parameters
+        const urlParams = new URLSearchParams(window.location.search);
+        const fundRequestId = urlParams.get('id');
+        
+        if (!fundRequestId) {
+            document.getElementById('loadingMessage').style.display = 'none';
+            document.getElementById('errorMessage').textContent = 'No fund request ID provided';
+            document.getElementById('errorMessage').style.display = 'block';
+        }
+
+        // Fetch fund request details
+        async function fetchFundRequestDetails() {
+            try {
+                // First get all fund requests
+                const response = await fetch('http://localhost:5000/api/users/fund-requests');
+                const data = await response.json();
+
+                // Hide loading message
+                document.getElementById('loadingMessage').style.display = 'none';
+
+                if (data.success && data.requests) {
+                    // Find the specific fund request by ID
+                    const fundRequest = data.requests.find(request => request._id === fundRequestId);
+                    
+                    if (fundRequest) {
+                        // Update the UI with fund request details
+                        document.getElementById('donationPurpose').textContent = fundRequest.donationPurpose || fundRequest.purpose || 'No purpose specified';
+                        document.getElementById('itemDescription').textContent = fundRequest.itemDescription || 'No description available';
+                        document.getElementById('amountRaised').textContent = fundRequest.amountRaised || 0;
+                        document.getElementById('amountRequested').textContent = fundRequest.amountRequested || 0;
+                        
+                        // Handle hero information
+                        if (fundRequest.hero) {
+                            document.getElementById('heroName').textContent = fundRequest.hero.name || 'Anonymous';
+                            document.getElementById('location').textContent = fundRequest.hero.location || 'Not specified';
+                        }
+                        
+                        // Update progress bar
+                        const amountRaised = parseFloat(fundRequest.amountRaised) || 0;
+                        const amountRequested = parseFloat(fundRequest.amountRequested) || 1;
+                        const progress = (amountRaised / amountRequested) * 100;
+                        document.getElementById('progressBar').style.width = `${Math.min(progress, 100)}%`;
+
+                        // Update images with proper URLs
+                        if (fundRequest.animalPhoto) {
+                            document.getElementById('animalPhoto').src = `http://localhost:5000/uploads/${fundRequest.animalPhoto}`;
+                        } else {
+                            document.getElementById('animalPhoto').src = 'https://placehold.co/400x300?text=No+Image';
+                        }
+                        
+                        // For QR code, we'll use the hero's QR code if available
+                        if (fundRequest.hero && fundRequest.hero.qrCode) {
+                            console.log('QR Code path:', `http://localhost:5000/uploads/${fundRequest.hero.qrCode}`);
+                            const qrCodeImg = document.getElementById('qrCode');
+                            qrCodeImg.onerror = function() {
+                                console.error('Failed to load QR code:', this.src);
+                                this.src = 'https://placehold.co/300x300?text=QR+Code';
+                            };
+                            qrCodeImg.onload = function() {
+                                console.log('QR code loaded successfully');
+                            };
+                            qrCodeImg.src = `http://localhost:5000/uploads/${fundRequest.hero.qrCode}`;
+                        } else {
+                            console.log('No QR code available for this hero');
+                            document.getElementById('qrCode').src = 'https://placehold.co/300x300?text=QR+Code';
+                        }
+
+                        // Show the content
+                        document.getElementById('fundRequestContent').style.display = 'block';
+                    } else {
+                        document.getElementById('errorMessage').textContent = 'Fund request not found';
+                        document.getElementById('errorMessage').style.display = 'block';
+                    }
+                } else {
+                    document.getElementById('errorMessage').textContent = data.msg || 'Error loading fund request details';
+                    document.getElementById('errorMessage').style.display = 'block';
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                document.getElementById('errorMessage').textContent = 'Failed to load fund request details. Please try again later.';
+                document.getElementById('errorMessage').style.display = 'block';
+            }
+        }
+
+        // Call the function when the page loads
+        if (fundRequestId) {
+            window.addEventListener('load', fetchFundRequestDetails);
+        }
+    </script>
+
+     <!-- Purpose Input Modal -->
+<!-- Purpose Input Modal -->
+<!-- Purpose Input Modal -->
+<div id="purposeModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.5); z-index: 1000; justify-content: center; align-items: center;">
+    <div style="background: white; padding: 20px; border-radius: 8px; width: 400px; text-align: center;">
+        <h3>Enter Donation Purpose</h3>
+        <p>Please type the purpose of the donation below:</p>
+        <input type="text" id="purposeInput" style="width: 100%; margin: 10px 0; padding: 8px;" placeholder="Enter purpose here" />
+        <div id="purposeError" class="error-message" style="display: none; color: red; margin-top: 10px;">Purpose is required.</div>
+        <button id="submitPurposeButton" style="background: #4CAF50; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer;">Submit</button>
+        <button id="cancelPurposeButton" style="background: #f44336; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; margin-left: 10px;">Cancel</button>
+    </div>
+</div>
+</div>
+</div>
+<script>
+    document.getElementById("submitPurposeButton").onclick = async function () {
+        const purposeInput = document.getElementById("purposeInput").value.trim();
+        const purposeError = document.getElementById("purposeError");
+    
+        if (!purposeInput) {
+            purposeError.style.display = "block"; // Show error if purpose is empty
+            return;
+        }
+    
+        purposeError.style.display = "none"; // Hide error
+        document.getElementById("purposeModal").style.display = "none"; // Hide the modal
+    
+        // Proceed with the receipt upload
+        const fileInput = document.getElementById("paymentScreenshot");
+        const file = fileInput.files[0];
+        const userEmail = localStorage.getItem("userEmail"); // Retrieve the donor's email
+        const userRole = localStorage.getItem("userRole"); // Retrieve the donor's role
+    
+        if (!file || !userEmail) {
+            alert("Please select a file and ensure you are logged in.");
+            return;
+        }
+    
+        const formData = new FormData();
+        formData.append("paymentScreenshot", file);
+        formData.append("userEmail", userEmail);
+        formData.append("userRole", userRole);
+        formData.append("donationPurpose", purposeInput);
+    
+        try {
+            const response = await fetch("http://localhost:5000/api/upload-payment", {
+                method: "POST",
+                body: formData,
+            });
+    
+            const result = await response.json();
+    
+            if (result.success) {
+                alert("Receipt uploaded successfully!");
+                document.getElementById("uploadSuccessMessage").style.display = "block";
+            } else {
+                throw new Error(result.message || "Upload failed");
+            }
+        } catch (error) {
+            console.error("Error uploading receipt:", error);
+            alert("An error occurred while uploading the receipt.");
+            document.getElementById("uploadErrorMessage").style.display = "block";
+        }
+    };
+    document.getElementById("cancelPurposeButton").onclick = function () {
+        document.getElementById("purposeModal").style.display = "none"; // Hide the modal
+    };
+</script>
+
+<div class="featured-card">
+    <div class="qr-code">
+        <!-- Your existing QR code content -->
+    </div>
+    
+    <div class="verified-receipts">
+        <h3>Previous Hero Receipts</h3>
+        <div id="verifiedReceiptsList" class="receipts-grid">
+            <!-- Verified receipts will be displayed here -->
+        </div>
+    </div>
+</div>
+
+<script>
+async function loadVerifiedReceipts() {
+    try {
+        const response = await fetch('http://localhost:5000/api/verified-receipts');
+        const data = await response.json();
+
+        if (data.success) {
+            const receiptsContainer = document.getElementById('verifiedReceiptsList');
+            receiptsContainer.innerHTML = data.data.map(receipt => `
+                <div class="receipt-item">
+                    <img src="http://localhost:5000${receipt.filePath}" alt="Verified Receipt">
+                    <p>Hero: ${receipt.userEmail}</p>
+                    <p>Verified: ${new Date(receipt.verifiedAt).toLocaleDateString()}</p>
+                    <span class="verified-badge">Verified</span>
+                </div>
+            `).join('');
+        } else {
+            console.error('Failed to load verified receipts:', data.message);
+        }
+    } catch (error) {
+        console.error('Error loading verified receipts:', error);
+    }
+}
+
+// Load verified receipts when the page loads
+document.addEventListener('DOMContentLoaded', loadVerifiedReceipts);
+</script>
+
+</body>
+</html> 

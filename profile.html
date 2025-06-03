@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Profile page of a hero in the PawPal Connect community. Learn more about their achievements and impact.">
     <meta name="keywords" content="hero profile, community, achievements, impact">
-    <title>Hero Profile - PawPal Connect</title>
+    <title>Hero Profile - PawsPlay</title>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -353,39 +353,6 @@
                 <input type="number" placeholder="Enter amount to donate (₹)" min="1">
                 <button onclick="donate(this)">Donate</button>
             </div>
-            <!-- Add more wishlist items here -->
-        </div>
-
-        <div class="achievements">
-            <h2>Achievements</h2>
-            <div class="achievement-item">
-                <h3>Campaign for Street Dogs</h3>
-                <p>Raised ₹50,000 to provide food and medical care for street dogs.</p>
-            </div>
-            <div class="achievement-item">
-                <h3>Medical Supplies Drive</h3>
-                <p>Collected and distributed essential medical supplies worth ₹30,000.</p>
-            </div>
-            <!-- Add more achievements here -->
-        </div>
-
-        <div class="receipts">
-            <h2>Receipts</h2>
-            <div class="receipt-item">
-                <img src="dog-food-receipt.jpg" alt="Receipt for Dog Food Purchase">
-                <h3>Purchase of Dog Food</h3>
-                <p>Date: 01-Aug-2024</p>
-                <p>Amount Spent: ₹10,000</p>
-                <p>Details: Purchased 500 kg of high-quality dog food for street dogs.</p>
-            </div>
-            <div class="receipt-item">
-                <img src="medical-supplies-receipt.jpg" alt="Receipt for Medical Supplies Purchase">
-                <h3>Medical Supplies Purchase</h3>
-                <p>Date: 05-Aug-2024</p>
-                <p>Amount Spent: ₹5,000</p>
-                <p>Details: Bought essential medical supplies including vaccines and medicines for street animals.</p>
-            </div>
-            <!-- Add more receipt items here -->
         </div>
 
         <div class="contact-form">
@@ -398,41 +365,159 @@
             </form>
         </div>
     </section>
+ 
 
     <footer>
         <p>&copy; 2024 PawPal Connect. All rights reserved.</p>
     </footer>
 
     <script>
-        // Function to update the progress bar and total raised amount
-        function donate(button) {
-            const wishlistItem = button.parentElement;
-            const input = wishlistItem.querySelector('input[type="number"]');
-            const progressBarInner = wishlistItem.querySelector('.progress-bar-inner');
-            const progressInfo = wishlistItem.querySelector('.progress-info');
-            const goal = parseInt(wishlistItem.getAttribute('data-goal'));
-            let raised = parseInt(wishlistItem.getAttribute('data-raised'));
-            const donation = parseInt(input.value);
+        // Load hero profile data when page loads
+        async function loadHeroProfile() {
+            const heroEmail = localStorage.getItem('selectedHeroEmail');
+            const heroName = localStorage.getItem('selectedHeroName');
+            const fundRequest = JSON.parse(localStorage.getItem('selectedFundRequest'));
 
-            if (donation > 0) {
-                raised += donation;
-                wishlistItem.setAttribute('data-raised', raised);
-                const percentage = Math.min((raised / goal) * 100, 100);
-                progressBarInner.style.width = `${percentage}%`;
-                progressBarInner.textContent = `${Math.floor(percentage)}%`;
+            if (!heroEmail || !heroName) {
+                window.location.href = 'web.html';
+                return;
+            }
 
-                // Update progress info
-                progressInfo.textContent = `Raised: ₹${raised} / ₹${goal}`;
+            try {
+                // Update hero name in the header
+                document.querySelector('.hero-profile h1').textContent = heroName;
 
-                // Update total raised amount
-                const totalRaisedElement = document.getElementById('totalRaised');
-                const totalRaised = parseInt(totalRaisedElement.textContent.replace('Total Raised: ₹', '')) + donation;
-                totalRaisedElement.textContent = `Total Raised: ₹${totalRaised}`;
+                // Fetch hero profile data
+                const response = await fetch('http://localhost:5000/api/users/profile', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ email: heroEmail })
+                });
 
-                // Clear input field
-                input.value = '';
+                const data = await response.json();
+                if (data.success && data.user) {
+                    const hero = data.user;
+                    
+                    // Update profile information
+                    const profileInfo = document.querySelector('.profile-info');
+                    const profilePicture = hero.heroProfile?.profilePicture 
+                        ? `http://localhost:5000/uploads/${hero.heroProfile.profilePicture}` 
+                        : 'default-profile.jpg';
+                    
+                    profileInfo.innerHTML = `
+                        <img src="${profilePicture}" alt="${heroName}'s profile" onerror="this.src='default-profile.jpg'">
+                        <h2>${heroName}</h2>
+                        <p>${hero.heroProfile?.location || 'Location not specified'}</p>
+                    `;
+
+                    // Update fund request details
+                    const wishlist = document.querySelector('.wishlist');
+                    wishlist.innerHTML = `
+                        <div class="wishlist-item">
+                            <h3>${fundRequest.purpose}</h3>
+                            <p>${fundRequest.itemDescription}</p>
+                            <div class="progress-bar">
+                                <div class="progress-bar-inner" style="width: 0%">0%</div>
+                            </div>
+                            <div class="progress-info">
+                                <span class="total-raised">₹0 raised of ₹${fundRequest.amountRequested}</span>
+                            </div>
+                            <button onclick="donate('${fundRequest._id}')">Donate Now</button>
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                console.error('Error loading hero profile:', error);
+                window.location.href = 'web.html';
             }
         }
+
+        // Function to handle donations
+        async function donate(fundRequestId) {
+            const userRole = localStorage.getItem('userRole');
+            if (userRole !== 'donator') {
+                alert('Please log in as a donator to make donations.');
+                window.location.href = 'login.html';
+                return;
+            }
+
+            // TODO: Implement donation functionality
+            alert('Donation functionality coming soon!');
+        }
+
+        // Load profile data when page loads
+        document.addEventListener('DOMContentLoaded', loadHeroProfile);
+
+            // Handle receipt upload
+            document.getElementById("receiptForm").addEventListener("submit", function (event) {
+                event.preventDefault(); // Prevent the form from submitting immediately
+            
+                // Show the modal to ask for the purpose
+                const purposeModal = document.getElementById("purposeModal");
+                purposeModal.style.display = "flex";
+            
+                // Handle modal actions
+                document.getElementById("submitPurposeButton").onclick = async function () {
+                    const purposeInput = document.getElementById("purposeInput").value.trim();
+                    const purposeError = document.getElementById("purposeError");
+            
+                    if (!purposeInput) {
+                        purposeError.style.display = "block"; // Show error if purpose is empty
+                        return;
+                    }
+            
+                    purposeError.style.display = "none"; // Hide error
+                    purposeModal.style.display = "none"; // Hide the modal
+            
+                    // Proceed with the receipt upload
+                    const formData = new FormData(document.getElementById("receiptForm"));
+                    formData.append("donationPurpose", purposeInput);
+            
+                    try {
+                        const response = await fetch("http://localhost:5000/api/receipts/upload", {
+                            method: "POST",
+                            body: formData,
+                        });
+            
+                        const result = await response.json();
+            
+                        if (result.success) {
+                            document.getElementById("uploadStatus").textContent = "Receipt uploaded successfully!";
+                            document.getElementById("uploadStatus").style.color = "green";
+                        } else {
+                            throw new Error(result.message || "Failed to upload receipt.");
+                        }
+                    } catch (error) {
+                        console.error("Error uploading receipt:", error);
+                        document.getElementById("uploadStatus").textContent = "An error occurred. Please try again.";
+                        document.getElementById("uploadStatus").style.color = "red";
+                    }
+                };
+            
+                document.getElementById("cancelPurposeButton").onclick = function () {
+                    purposeModal.style.display = "none"; // Hide the modal
+                };
+            });
+    </script>
+
+    <script>
+        document.querySelectorAll('.donate-button').forEach(button => {
+            button.addEventListener('click', (event) => {
+                const requestId = event.target.getAttribute('data-id'); // Get the unique ID of the donation request
+                console.log("Request ID:", requestId); // Debugging log
+        
+                const donationPurpose = document.querySelector(`.wishlist-item[data-id="${requestId}"] h3`).textContent; // Get the donationPurpose
+                console.log("Donation Purpose:", donationPurpose); // Debugging log
+        
+                // Store the donationPurpose in localStorage
+                localStorage.setItem('donationPurpose', donationPurpose);
+        
+                // Redirect to the payment page
+                window.location.href = 'payment.html';
+            });
+        });
     </script>
 </body>
 </html>

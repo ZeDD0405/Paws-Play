@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PawsPlay Admin Login</title>
+    <style>
+        :root {
+            --primary-color: #4caf50;
+            --secondary-color: #45a049;
+            --text-color: #333;
+            --error-color: #f44336;
+            --success-color: #4caf50;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+
+        .admin-login-container {
+            background: white;
+            padding: 2.5rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+            margin-top: 2rem;
+        }
+
+        .admin-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .admin-header h1 {
+            color: var(--primary-color);
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .admin-header p {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--text-color);
+            font-weight: 500;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+
+        .error-message {
+            color: var(--error-color);
+            font-size: 0.875rem;
+            margin-top: 0.25rem;
+            display: none;
+        }
+
+        .login-button {
+            width: 100%;
+            padding: 0.75rem;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .login-button:hover {
+            background: var(--secondary-color);
+        }
+
+        .back-to-site {
+            display: inline-block;
+            margin-top: 1rem;
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .back-to-site:hover {
+            text-decoration: underline;
+        }
+
+        .success-message {
+            background: #e8f5e9;
+            color: var(--success-color);
+            padding: 1rem;
+            border-radius: 4px;
+            margin-bottom: 1rem;
+            display: none;
+        }
+
+        @media (max-width: 480px) {
+            .admin-login-container {
+                padding: 1.5rem;
+            }
+
+            .admin-header h1 {
+                font-size: 1.75rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="admin-login-container">
+        <div class="admin-header">
+            <h1>Admin Login</h1>
+            <p>Access the PawsPlay admin dashboard</p>
+        </div>
+
+        <div id="successMessage" class="success-message">Login successful! Redirecting...</div>
+        <div id="errorMessage" class="error-message"></div>
+
+        <form id="adminLoginForm">
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" required>
+            </div>
+
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" required>
+            </div>
+
+            <button type="submit" class="login-button">Login</button>
+        </form>
+
+        <a href="web.html" class="back-to-site">← Back to Site</a>
+    </div>
+
+    <script>
+        document.getElementById('adminLoginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const errorMessage = document.getElementById('errorMessage');
+            const successMessage = document.getElementById('successMessage');
+
+            // Clear previous messages
+            errorMessage.textContent = '';
+            successMessage.textContent = '';
+
+            // Validate input
+            if (!email || !password) {
+                errorMessage.textContent = 'Please provide both email and password';
+                return;
+            }
+
+            try {
+                const response = await fetch('http://localhost:5000/api/users/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    credentials: 'include',
+                    body: JSON.stringify({ email, password })
+                });
+
+                const data = await response.json();
+                console.log('Login response:', data); // Debug log
+
+                if (data.success) {
+                    // Check if user is admin
+                    if (data.user.role !== 'admin') {
+                        errorMessage.textContent = 'Access denied. Admin privileges required.';
+                        return;
+                    }
+
+                    // Store admin info in localStorage
+                    localStorage.setItem('adminUser', JSON.stringify(data.user));
+                    localStorage.setItem('isAdminLoggedIn', 'true');
+                    successMessage.textContent = 'Login successful! Redirecting...';
+                    
+                    // Immediate redirect without setTimeout
+                    window.location.replace('../admin.html');
+                } else {
+                    errorMessage.textContent = data.msg || 'Login failed. Please check your credentials.';
+                }
+            } catch (error) {
+                console.error('Login error:', error);
+                errorMessage.textContent = 'An error occurred. Please try again.';
+            }
+        });
+    </script>
+</body>
+</html> 

@@ -7,6 +7,7 @@
     <meta name="keywords" content="donate, animals, charity, crowdfunding, street animals">
     <title>PawsPlay</title>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <style>
         :root {
             --primary-color: lightgreen;
@@ -19,6 +20,33 @@
             --transition-speed: 0.4s;
         }
 
+        body, html {
+            padding-left: 0 !important;
+            margin-left: 0 !important;
+        }
+        header, nav, nav .container {
+            padding-left: 0 !important;
+            margin-left: 0 !important;
+        }
+        nav .container {
+            max-width: 100% !important;
+            width: 100% !important;
+            margin: 0 !important;
+            padding-left: 0 !important;
+            padding-right: 1.5rem;
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            gap: 2rem;
+        }
+        nav h1 {
+            margin-left: 0 !important;
+            margin-right: 2rem;
+        }
+        nav ul {
+            margin-left: auto;
+        }
+
         body {
             font-family: 'Roboto', sans-serif;
             margin: 0;
@@ -29,76 +57,130 @@
         }
 
         header {
-            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
-            color: var(--text-color-light);
-            padding: 1rem 2rem;
+            background: var(--primary-color);
+            color: white;
+            padding: 0.75rem 0;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
             position: fixed;
             width: 100%;
             top: 0;
             left: 0;
             z-index: 1000;
-            box-shadow: 0 4px 8px var(--shadow-color);
-            transition: background var(--transition-speed), box-shadow var(--transition-speed);
+            transition: all 0.3s ease;
         }
 
         header.scrolled {
-            background: var(--primary-color);
-            box-shadow: 0 6px 12px var(--shadow-color);
+            padding: 0.5rem 0;
+            background: rgba(76, 175, 80, 0.95);
+            backdrop-filter: blur(5px);
         }
 
         nav {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
             max-width: 1200px;
             margin: 0 auto;
+            padding: 0 1.5rem;
+        }
+
+        nav .container {
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            height: 100%;
+            padding-right: 1.5rem;
+            padding-left: 0;
+            gap: 2rem;
         }
 
         nav h1 {
-            font-family: 'Playfair Display', serif;
+            margin-left: 0;
+            margin-right: 2rem;
             font-size: 2.5rem;
-            margin: 0;
-            letter-spacing: 2px;
+            font-weight: 800;
+            color: white;
+            font-family: 'Playfair Display', serif;
+            letter-spacing: 1px;
             text-transform: uppercase;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
         }
 
         nav ul {
             list-style: none;
-            display: flex;
-            margin: 0;
             padding: 0;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            margin-left: auto;
+            gap: 2rem;
+            height: 100%;
         }
 
         nav ul li {
-            margin-left: 2rem;
-            position: relative;
+            display: flex;
+            align-items: center;
+            height: 100%;
         }
 
         nav ul li a {
-            color: var(--text-color-light);
+            color: white;
             text-decoration: none;
+            font-weight: 600;
+            font-size: 1rem;
+            padding: 0.75rem 1.25rem;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            height: 100%;
+        }
+
+        nav ul li a:hover {
+            background: rgba(255, 255, 255, 0.15);
+            transform: translateY(-1px);
+        }
+
+        .cta-button {
+            background: white;
+            color: var(--primary-color);
+            padding: 0.75rem 1.5rem;
+            border-radius: 4px;
             font-weight: 700;
-            transition: color var(--transition-speed), transform var(--transition-speed);
-            position: relative;
-            padding-bottom: 5px;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-size: 0.9rem;
         }
 
-        nav ul li a::after {
-            content: '';
-            position: absolute;
-            left: 0;
-            bottom: 0;
-            width: 100%;
-            height: 3px;
-            background: var(--secondary-color);
-            transform: scaleX(0);
-            transition: transform var(--transition-speed);
-            transform-origin: bottom right;
+        .cta-button:hover {
+            background: #f5f5f5;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
 
-        nav ul li a:hover::after {
-            transform: scaleX(1);
-            transform-origin: bottom left;
+        #userInfo {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            height: 100%;
+        }
+
+        #userInfo span {
+            color: white;
+            font-weight: 600;
+            font-size: 1rem;
+        }
+
+        @media (max-width: 768px) {
+            nav ul {
+                display: none;
+            }
+            
+            nav .container {
+                justify-content: center;
+            }
+            
+            nav h1 {
+                font-size: 2rem;
+            }
         }
 
         .hero {
@@ -124,24 +206,6 @@
             letter-spacing: 1px;
             opacity: 0;
             animation: fadeInText 1.5s ease-out forwards;
-        }
-
-        .cta-button {
-            background: var(--secondary-color);
-            color: var(--text-color-light);
-            padding: 0.75rem 2rem;
-            text-decoration: none;
-            border-radius: 30px;
-            font-size: 1.2rem;
-            font-weight: 700;
-            transition: background var(--transition-speed), transform var(--transition-speed), box-shadow var(--transition-speed);
-            box-shadow: 0 4px 8px var(--shadow-color);
-        }
-
-        .cta-button:hover {
-            background: var(--hover-color);
-            transform: scale(1.05);
-            box-shadow: 0 6px 12px var(--shadow-color);
         }
 
         .section {
@@ -376,19 +440,414 @@ footer.dark-mode {
     background: #F44336; /* Red */
 }
 
+.status-tag {
+    display: inline-block;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    font-weight: bold;
+    margin-top: 10px;
+}
+
+.status-tag.pending {
+    background-color: #ffd700;
+    color: #000;
+}
+
+.status-tag.approved {
+    background-color: #4caf50;
+    color: white;
+}
+
+.status-tag.rejected {
+    background-color: #f44336;
+    color: white;
+}
+
+.fund-request-card {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    overflow: hidden;
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+.fund-request-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.fund-request-card img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    border-bottom: 1px solid #eee;
+}
+
+.fund-request-card .card-content {
+    padding: 20px;
+}
+
+.fund-request-card h3 {
+    color: #333;
+    font-size: 1.2rem;
+    margin: 0 0 10px 0;
+    font-weight: 600;
+}
+
+.fund-request-card p {
+    color: #666;
+    font-size: 0.9rem;
+    margin: 5px 0;
+    line-height: 1.4;
+}
+
+.fund-request-card .progress-container {
+    margin: 15px 0;
+}
+
+.fund-request-card .progress-bar {
+    width: 100%;
+    height: 8px;
+    background-color: #e0e0e0;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.fund-request-card .progress {
+    height: 100%;
+    background-color: var(--primary-color);
+    transition: width 0.3s ease;
+}
+
+.fund-request-card .amount-info {
+    display: flex;
+    justify-content: space-between;
+    margin: 10px 0;
+    font-size: 0.9rem;
+}
+
+.fund-request-card .hero-info {
+    margin: 15px 0;
+    padding-top: 15px;
+    border-top: 1px solid #eee;
+}
+
+.fund-request-card button {
+    width: 100%;
+    padding: 12px;
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.fund-request-card button:hover {
+    background-color: #45a049;
+}
+
+#fundRequestsContainer {
+    text-align: center;
+    padding: 20px;
+}
+
+.hero-info {
+    font-size: 0.9rem;
+    color: var(--text-color-dark);
+}
+
+.hero-info p {
+    margin: 0.25rem 0;
+}
+
+.item-link {
+    display: inline-block;
+    background: var(--primary-color);
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    font-weight: 500;
+}
+
+.item-link:hover {
+    background: var(--secondary-color);
+    transform: translateY(-2px);
+}
+
+.status-tag {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: bold;
+    margin-top: 0.5rem;
+}
+
+.status-tag.pending {
+    background-color: #ffd700;
+    color: #000;
+}
+
+.status-tag.approved {
+    background-color: #4caf50;
+    color: white;
+}
+
+.status-tag.rejected {
+    background-color: #f44336;
+    color: white;
+}
+
+/* Grid layout for fund requests */
+#fundRequestsGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 2rem;
+    padding: 2rem;
+}
+
+@media (max-width: 768px) {
+    #fundRequestsGrid {
+        grid-template-columns: 1fr;
+    }
+
+    .fund-request-meta {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .item-link {
+        width: 100%;
+        text-align: center;
+    }
+}
+
+.featured-request {
+    background: var(--text-color-light);
+    border-radius: 12px;
+    box-shadow: 0 6px 12px var(--shadow-color);
+    margin-bottom: 2rem;
+    overflow: hidden;
+    padding: 2rem;
+}
+
+.featured-content {
+    display: flex;
+    gap: 2rem;
+    align-items: flex-start;
+}
+
+.featured-image {
+    flex: 0 0 300px;
+}
+
+.featured-image img {
+    width: 100%;
+    height: 300px;
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+.featured-details {
+    flex: 1;
+}
+
+.featured-details h2 {
+    color: var(--primary-color);
+    margin-bottom: 1rem;
+}
+
+.hero-name {
+    font-size: 1.2rem;
+    color: var(--text-color-dark);
+    margin-bottom: 0.5rem;
+}
+
+.location {
+    color: #666;
+    margin-bottom: 1rem;
+}
+
+.description {
+    margin-bottom: 1.5rem;
+    line-height: 1.6;
+}
+
+.amount-info {
+    display: flex;
+    gap: 2rem;
+    margin-bottom: 1rem;
+}
+
+.amount, .raised {
+    display: flex;
+    flex-direction: column;
+}
+
+.label {
+    font-size: 0.9rem;
+    color: #666;
+}
+
+.value {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: var(--primary-color);
+}
+
+.progress-bar {
+    height: 8px;
+    background: #eee;
+    border-radius: 4px;
+    overflow: hidden;
+    margin-bottom: 1rem;
+}
+
+.progress {
+    height: 100%;
+    background: var(--primary-color);
+    transition: width 0.3s ease;
+}
+
+.featured-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.days-left {
+    color: #666;
+}
+
+.donate-button {
+    background: var(--primary-color);
+    color: white;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.donate-button:hover {
+    background: var(--hover-color);
+    transform: translateY(-2px);
+}
+
+@media (max-width: 768px) {
+    .featured-content {
+        flex-direction: column;
+    }
+
+    .featured-image {
+        flex: 0 0 auto;
+    }
+
+    .amount-info {
+        flex-direction: column;
+        gap: 1rem;
+    }
+}
+
+.fund-requests-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+    padding: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.section-title {
+    text-align: center;
+    font-size: 2rem;
+    color: #333;
+    margin-bottom: 2rem;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.fund-request-card .description {
+    font-size: 14px;
+    color: #666;
+    margin: 10px 0;
+    line-height: 1.4;
+}
+
+.fund-request-card .amount {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    font-size: 14px;
+    color: #333;
+}
+
+.fund-request-card .amount div:first-child {
+    color: #4CAF50;
+    font-weight: 600;
+}
+
+.featured-section {
+    padding: 40px 20px;
+    background-color: #f5f5f5;
+}
+
+.featured-section h2 {
+    text-align: center;
+    color: var(--primary-color);
+    margin-bottom: 30px;
+    font-size: 2rem;
+}
+
+.fund-requests-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+
     </style>
 </head>
 <body>
     
     <header id="header">
         <nav>
+            <div class="container">
             <h1>PawsPlay</h1>
             <ul>
+                    <li><a href="#home">Home</a></li>
                 <li><a href="#how-it-works">How It Works</a></li>
                 <li><a href="#success-stories">Success Stories</a></li>
-                <li><a href="#featured-profiles">Featured Profiles</a></li>
-                <li><a href="#contact">Contact</a></li>
+                    <li><a href="#featured-profiles">Fund Requests</a></li>
+                    <li><a href="#faq">FAQ</a></li>
+                    <li><a href="contact.html">Contact Admin</a></li>
+                    <li id="userInfo">
+                        <!-- User info will be populated here -->
+                    </li>
+                    <li id="editProfileLink" style="display: none;">
+                        <a href="edit.html" class="cta-button">Edit Profile</a>
+                    </li>
+                    <li id="logoutLink" style="display: none;">
+                        <a href="#" onclick="handleLogout()" class="cta-button" style="background-color: #f44336; color: white;">Logout</a>
+                    </li>
             </ul>
+            </div>
         </nav>
     </header>
     <section class="hero">
@@ -401,24 +860,24 @@ footer.dark-mode {
         <h2>How It Works</h2>
         <div class="grid">
             <div class="card">
-                <img src="/a1.png" alt="Find a Request">
+                <img src="a1.png" alt="Find a Request">
                 <div class="card-content">
                     <h3>Find a Request</h3>
                     <p>Browse the list of items needed by street animals and choose what to help with.</p>
                 </div>
             </div>
             <div class="card">
-                <img src="/donate.png" alt="Make a Donation">
+                <img src="donate.png" alt="Make a Donation">
                 <div class="card-content">
                     <h3>Make a Donation</h3>
                     <p>Choose the item you want to donate and complete the process through our secure platform.</p>
                 </div>
             </div>
             <div class="card">
-                <img src="/seechange-removebg-preview.png" alt="See the Impact">
+                <img src="seechange-removebg-preview.png" alt="See the Impact">
                 <div class="card-content">
                     <h3>See the Impact</h3>
-                    <p>Track the progress of your donation and witness the positive changes you’ve helped create.</p>
+                    <p>Track the progress of your donation and witness the positive changes you've helped create.</p>
                 </div>
             </div>
         </div>
@@ -427,14 +886,14 @@ footer.dark-mode {
         <h2>Success Stories</h2>
         <div class="grid">
             <div class="card">
-                <img src="/desktop-home-dog-hero-2x.jpg" alt="Success Story 1">
+                <img src="desktop-home-dog-hero-2x.jpg" alt="Success Story 1">
                 <div class="card-content">
                     <h3>Max's New Home</h3>
-                    <p>Thanks to your donations, Max now has a warm bed and plenty of food. He’s thriving in his new environment!</p>
+                    <p>Thanks to your donations, Max now has a warm bed and plenty of food. He's thriving in his new environment!</p>
                 </div>
             </div>
             <div class="card">
-                <img src="/happy-cat.jpg" alt="Success Story 2">
+                <img src="happy-cat.jpg" alt="Success Story 2">
                 <div class="card-content">
                     <h3>Luna's Recovery</h3>
                     <p>Luna received the medical treatment she needed and is on her way to a full recovery. Your support made this possible!</p>
@@ -443,36 +902,89 @@ footer.dark-mode {
         </div>
     </section>
     <section id="featured-profiles" class="section">
-        <h2>Featured Profiles</h2>
-        <div class="grid">
-            <div class="card">
-                <a href="profile.html">
-                    <img src="profile1.jpg" alt="Profile 1">
-                    <div class="card-content">
-                        <h3>Jane Doe</h3>
-                        <p>Jane has been helping street animals for over a decade. She specializes in rescuing and rehabilitating injured animals.</p>
-                    </div>
-                </a>
-            </div>
-            <div class="card">
-                <a href="profile.html">
-                    <img src="profile2.jpg" alt="Profile 2">
-                    <div class="card-content">
-                        <h3>John Smith</h3>
-                        <p>John runs a small shelter that focuses on finding homes for stray cats and dogs. His dedication has saved countless lives.</p>
-                    </div>
-                </a>
-            </div>
-            <div class="card">
-                <a href="profile.html">
-                    <img src="profile3.jpg" alt="Profile 3">
-                    <div class="card-content">
-                        <h3>Emily Johnson</h3>
-                        <p>Emily's passion is feeding and providing medical care for street animals. Her efforts have improved the lives of many animals in her community.</p>
-                    </div>
-                </a>
+        <div class="container">
+            <h2 class="section-title">Featured Fund Requests</h2>
+            <div id="fundRequestsContainer" class="fund-requests-grid">
+                <!-- Fund request cards will be loaded here -->
             </div>
         </div>
+        <script>
+            async function fetchAndDisplayFundRequests() {
+                try {
+                    const response = await fetch('http://localhost:5000/api/fund-requests');
+                    const data = await response.json();
+                    
+                    if (data.success) {
+                        const container = document.getElementById('fundRequestsContainer');
+                        container.innerHTML = ''; // Clear existing content
+                        
+                        // Filter out requests from restricted heroes
+                        const filteredRequests = data.requests.filter(request => 
+                            request.hero && request.hero.user && !request.hero.user.isRestricted
+                        );
+                        
+                        if (filteredRequests.length === 0) {
+                            container.innerHTML = '<p style="text-align: center;">No active fund requests at the moment.</p>';
+                            return;
+                        }
+                        
+                        filteredRequests.forEach(request => {
+                            const card = createFundRequestCard(request);
+                            container.appendChild(card);
+                        });
+                    } else {
+                        throw new Error('Failed to fetch fund requests');
+                    }
+                } catch (error) {
+                    console.error('Error:', error);
+                    const container = document.getElementById('fundRequestsContainer');
+                    container.innerHTML = '<p style="text-align: center; color: #ff4444;">Failed to load fund requests. Please try again later.</p>';
+                }
+            }
+        
+            function createFundRequestCard(fundRequest) {
+                const progress = ((fundRequest.amountRaised || 0) / fundRequest.amountRequested) * 100;
+                const userRole = localStorage.getItem('userRole');
+                
+                const card = document.createElement('div');
+                card.className = 'fund-request-card';
+                card.innerHTML = `
+                    <img src="${fundRequest.animalPhoto ? 'http://localhost:5000/uploads/' + fundRequest.animalPhoto : 'https://placehold.co/400x300?text=No+Image'}" 
+                         alt="Animal Photo" 
+                         onerror="this.src='https://placehold.co/400x300?text=No+Image'">
+                    <div class="card-content">
+                        <h3>${fundRequest.donationPurpose || 'Untitled Request'}</h3>
+                        <p class="description">${fundRequest.itemDescription || 'No description available'}</p>
+                        
+                        <div class="progress-container">
+                            <div class="progress-bar">
+                                <div class="progress" style="width: ${Math.min(progress, 100)}%"></div>
+                            </div>
+                            <div class="amount-info">
+                                <span>Raised: ₹${fundRequest.amountRaised || 0}</span>
+                                <span>Goal: ₹${fundRequest.amountRequested}</span>
+                            </div>
+                        </div>
+        
+                        <div class="hero-info">
+                            <p><strong>Hero:</strong> ${fundRequest.hero ? fundRequest.hero.name : 'Anonymous'}</p>
+                            <p><strong>Location:</strong> ${fundRequest.hero ? fundRequest.hero.location : 'Not specified'}</p>
+                        </div>
+        
+                        ${userRole === 'donator' ? `
+                            <button onclick="window.location.href='payment.html?id=${fundRequest._id}'">
+                                Donate Now
+                            </button>
+                        ` : ''}
+                    </div>
+                `;
+                return card;
+            }
+        
+            // Call the function when the page loads
+            window.addEventListener('load', fetchAndDisplayFundRequests);
+        </script>
+        
     </section>
     <section id="faq" class="section">
         <h2>Frequently Asked Questions</h2>
@@ -506,24 +1018,62 @@ footer.dark-mode {
         <p>&copy; 2024 PawsPlay. All Rights Reserved.</p>
     </footer>
     <script>
-        
+        // Update scroll behavior
         document.querySelectorAll('nav ul li a').forEach(anchor => {
             anchor.addEventListener('click', function(e) {
+                const href = this.getAttribute('href');
+                if (href.startsWith('#')) {
                 e.preventDefault();
-                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    const targetId = href.substring(1);
+                    const targetElement = document.getElementById(targetId);
+                    if (targetElement) {
+                        targetElement.scrollIntoView({
                     behavior: 'smooth'
                 });
+                    }
+                }
             });
         });
 
-       
-        window.addEventListener('scroll', () => {
-            const header = document.getElementById('header');
-            if (window.scrollY > 50) {
-                header.classList.add('scrolled');
-            } else {
-                header.classList.remove('scrolled');
+        // Function to handle logout
+        function handleLogout() {
+            localStorage.clear();
+            window.location.href = 'login.html';
+        }
+
+        // Check user role and update UI when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            const userRole = localStorage.getItem('userRole');
+            const userEmail = localStorage.getItem('userEmail');
+            const editProfileLink = document.getElementById('editProfileLink');
+            const logoutLink = document.getElementById('logoutLink');
+            const userInfo = document.getElementById('userInfo');
+
+            console.log('User role:', userRole);
+            console.log('User email:', userEmail);
+
+            // If no user is logged in, redirect to login page
+            if (!userRole || !userEmail) {
+                window.location.href = 'login.html';
+                return;
             }
+
+            // Show/hide appropriate navigation items
+            if (userRole === 'hero') {
+                editProfileLink.style.display = 'block';
+                userInfo.innerHTML = `<span style="color: white; margin-right: 1rem;">Welcome, ${userEmail}</span>`;
+            } else {
+                editProfileLink.style.display = 'none';
+                userInfo.innerHTML = `<span style="color: white; margin-right: 1rem;">Welcome, ${userEmail}</span>`;
+            }
+            
+            logoutLink.style.display = 'block';
+        });
+
+        // Header scroll effect
+        window.addEventListener('scroll', function() {
+            const header = document.querySelector('header');
+            header.classList.toggle('scrolled', window.scrollY > 0);
         });
     </script>
     
@@ -560,6 +1110,121 @@ footer.dark-mode {
         }
     });
 </script>
+
+<script>
+    async function loadUserProfile() {
+        try {
+            const response = await fetch('http://localhost:5000/api/users/profile', {
+                credentials: 'include'
+            });
+            const data = await response.json();
+            
+            if (data.success) {
+                const user = data.user;
+                const userInfo = document.getElementById('userInfo');
+                const loginSection = document.getElementById('loginSection');
+                const heroSection = document.getElementById('heroSection');
+                const editProfileBtn = document.getElementById('editProfileBtn');
+                
+                if (user) {
+                    userInfo.innerHTML = `
+                        <span>Welcome, ${user.name}</span>
+                        <button onclick="logout()" class="btn btn-outline-light">Logout</button>
+                    `;
+                    loginSection.style.display = 'none';
+                    heroSection.style.display = 'block';
+                    
+                    // Show Edit Profile button only for hero users
+                    if (user.role === 'hero') {
+                        editProfileBtn.style.display = 'block';
+                    } else {
+                        editProfileBtn.style.display = 'none';
+                    }
+                } else {
+                    userInfo.innerHTML = '';
+                    loginSection.style.display = 'block';
+                    heroSection.style.display = 'none';
+                    editProfileBtn.style.display = 'none';
+                }
+            }
+        } catch (error) {
+            console.error('Error loading user profile:', error);
+        }
+    }
+
+
+<div id="heroSection" class="hero-section" style="display: none;">
+    <h2>Welcome to PawsPlay</h2>
+    <p>Help street animals through donations</p>
+    <a href="edit.html" class="btn btn-primary" id="editProfileBtn" style="display: none;">Edit Profile</a>
+</div>
+async function fetchCauses() {
+    try {
+        const response = await fetch("http://localhost:5000/api/causes");
+        const data = await response.json();
+
+        if (data.success) {
+            const causesContainer = document.getElementById("causesContainer");
+            causesContainer.innerHTML = data.causes
+                .map(
+                    (cause) => `
+                    <div class="cause-card">
+                        <h3>${cause.name}</h3>
+                        <p>${cause.description}</p>
+                        <div class="progress-bar-container">
+                            <div class="progress-bar" style="width: ${(cause.amountRaised / cause.amountRequested) * 100}%;"></div>
+                        </div>
+                        <p>Raised: $${cause.amountRaised} / $${cause.amountRequested}</p>
+                    </div>
+                `
+                )
+                .join("");
+        } else {
+            console.error("Failed to load causes:", data.message);
+        }
+    } catch (error) {
+        console.error("Error loading causes:", error);
+    }
+}
+
+document.addEventListener("DOMContentLoaded", fetchCauses);
+</script>
+<script>
+    async function updateProgressBars() {
+        try {
+            const response = await fetch("http://localhost:5000/api/causes");
+            const data = await response.json();
+    
+            if (data.success) {
+                const causesContainer = document.getElementById("causesContainer");
+                causesContainer.innerHTML = data.causes
+                    .map(
+                        (cause) => `
+                        <div class="cause-card" id="cause-${cause.name}">
+                            <h3>${cause.name}</h3>
+                            <p>${cause.description}</p>
+                            <div class="progress-bar-container">
+                                <div class="progress-bar" style="width: ${(cause.amountRaised / cause.amountRequested) * 100}%;"></div>
+                            </div>
+                            <p>Raised: $${cause.amountRaised} / $${cause.amountRequested}</p>
+                            <button onclick="deleteFundRequest('${cause.name}')">Delete</button>
+                        </div>
+                    `
+                    )
+                    .join("");
+            } else {
+                console.error("Failed to load causes:", data.message);
+            }
+        } catch (error) {
+            console.error("Error loading causes:", error);
+        }
+    }
+      
+window.addEventListener("load", updateProgressBars);
+
+
+</script>
+
 
 </body>
 </html>

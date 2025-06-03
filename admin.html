@@ -1,0 +1,1077 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PawsPlay Admin Dashboard</title>
+    <style>
+        :root {
+            --primary-color: #4caf50;
+            --secondary-color: #45a049;
+            --text-color: #333;
+            --light-bg: #f5f5f5;
+            --border-color: #ddd;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--light-bg);
+            color: var(--text-color);
+        }
+
+        header {
+            background: var(--primary-color);
+            color: white;
+            padding: 1rem 0;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        nav {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+        }
+
+        nav .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        nav h1 {
+            margin: 0;
+            font-size: 2rem;
+            font-weight: 700;
+        }
+
+        .back-button {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+
+        .back-button:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .admin-container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1.5rem;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .stat-card h3 {
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-card .number {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--text-color);
+        }
+
+        .users-section {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .users-section h2 {
+            margin-bottom: 1.5rem;
+            color: var(--primary-color);
+        }
+
+        .users-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+
+        .users-table th,
+        .users-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .users-table th {
+            background: var(--light-bg);
+            font-weight: 600;
+        }
+
+        .users-table tr:hover {
+            background: var(--light-bg);
+        }
+
+        .role-badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+
+        .role-badge.hero {
+            background: #e3f2fd;
+            color: #1976d2;
+        }
+
+        .role-badge.donator {
+            background: #f3e5f5;
+            color: #7b1fa2;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 2rem;
+            font-size: 1.2rem;
+            color: var(--text-color);
+        }
+
+        .error {
+            text-align: center;
+            padding: 2rem;
+            color: #f44336;
+            font-size: 1.2rem;
+        }
+
+        @media (max-width: 768px) {
+            .users-table {
+                display: block;
+                overflow-x: auto;
+            }
+        }
+
+        .star-button {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 5px;
+            transition: color 0.3s ease;
+        }
+
+        .star-button.starred {
+            color: #ffd700;
+        }
+
+        .star-button:not(.starred) {
+            color: #ccc;
+        }
+
+        .restrict-button {
+            background: none;
+            border: none;
+            font-size: 1.2rem;
+            cursor: pointer;
+            padding: 5px;
+            transition: color 0.3s ease;
+        }
+
+        .restrict-button.restricted {
+            color: #ff4444;
+        }
+
+        .restrict-button:not(.restricted) {
+            color: #4CAF50;
+        }
+
+        .star-button:hover, .restrict-button:hover {
+            transform: scale(1.1);
+        }
+        /* Root variables for consistent colors */
+:root {
+    --primary-color: #4caf50;
+    --secondary-color: #45a049;
+    --text-color: #333;
+    --light-bg: #f5f5f5;
+    --border-color: #ddd;
+    --hover-bg: rgba(0, 0, 0, 0.05);
+}
+
+/* Global styles for body and table */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: var(--light-bg);
+    color: var(--text-color);
+}
+
+/* General styling for all tables */
+.styled-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1.5rem;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+}
+
+.styled-table th,
+.styled-table td {
+    padding: 1rem;
+    text-align: left;
+    border-bottom: 1px solid var(--border-color);
+    font-size: 1rem;
+}
+
+.styled-table th {
+    background-color: var(--primary-color);
+    color: white;
+    font-weight: 600;
+}
+
+.styled-table tr:hover {
+    background-color: var(--hover-bg);
+}
+
+.styled-table tbody tr:last-child {
+    border-bottom: none;
+}
+
+/* Action buttons (like star/restrict) */
+.styled-table .action-buttons {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.styled-table .action-buttons button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 5px 10px;
+    border-radius: 4px;
+    font-size: 1rem;
+    transition: all 0.3s;
+}
+
+.styled-table .action-buttons button:hover {
+    background-color: rgba(0, 0, 0, 0.1);
+}
+
+/* Custom styles for status columns (if any) */
+.styled-table .status-badge {
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    background: #e3f2fd;
+    color: #1976d2;
+    border-radius: 20px;
+    font-size: 0.875rem;
+}
+
+/* Media query for responsiveness */
+@media (max-width: 768px) {
+    .styled-table {
+        display: block;
+        overflow-x: auto;
+    }
+}
+
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="container">
+                <h1>PawsPlay Admin Dashboard</h1>
+                <a href="web.html" class="back-button">← Back to Site</a>
+            </div>
+        </nav>
+    </header>
+
+    <div class="admin-container">
+        <div class="stats-grid">
+            <div class="stat-card">
+                <h3>Total Users</h3>
+                <div class="number" id="totalUsers">-</div>
+            </div>
+            <div class="stat-card">
+                <h3>Hero Users</h3>
+                <div class="number" id="heroUsers">-</div>
+            </div>
+            <div class="stat-card">
+                <h3>Donor Users</h3>
+                <div class="number" id="donorUsers">-</div>
+            </div>
+        </div>
+
+        <div class="users-section">
+            <h2>User Information</h2>
+            <div id="loading" class="loading">Loading user data...</div>
+            <div id="error" class="error" style="display: none;">Error loading user data. Please try again later.</div>
+            <table class="users-table" id="usersTable" style="display: none;">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Role</th>
+                        <th>Joined Date</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="usersTableBody">
+                    <!-- User data will be populated here -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    
+    <script>
+        // Check if admin is logged in
+        function checkAdminAuth() {
+            const isAdminLoggedIn = localStorage.getItem('isAdminLoggedIn');
+            const adminUser = localStorage.getItem('adminUser');
+            
+            if (!isAdminLoggedIn || !adminUser) {
+                window.location.replace('admin-login.html');
+                return;
+            }
+
+            try {
+                const admin = JSON.parse(adminUser);
+                if (!admin || admin.role !== 'admin') {
+                    window.location.replace('admin-login.html');
+                }
+            } catch (error) {
+                console.error('Error checking admin auth:', error);
+                window.location.replace('admin-login.html');
+            }
+        }
+
+        // Run auth check when page loads
+        checkAdminAuth();
+
+        // Function to format date
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            return date.toLocaleDateString('en-US', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            });
+        }
+
+        // Function to load user data
+        async function loadUserData() {
+            try {
+                const response = await fetch('http://localhost:5000/api/admin/users');
+                const data = await response.json();
+
+                if (data.success) {
+                    // Update statistics
+                    document.getElementById('totalUsers').textContent = data.totalUsers;
+                    document.getElementById('heroUsers').textContent = data.heroUsers;
+                    document.getElementById('donorUsers').textContent = data.donorUsers;
+
+                    // Update user table
+                    const userTableBody = document.getElementById('usersTableBody');
+                    userTableBody.innerHTML = '';
+
+                    data.users.forEach(user => {
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                            <td>${user.username}</td>
+                            <td>${user.email}</td>
+                            <td>
+                                <span class="role-badge ${user.role}">${user.role}</span>
+                            </td>
+                            <td>${formatDate(user.createdAt)}</td>
+                            <td>
+                                <span class="status-badge ${user.isActive ? 'active' : 'inactive'}">
+                                    ${user.isActive ? 'Active' : 'Inactive'}
+                                </span>
+                            </td>
+                            <td>
+                                ${user.role === 'donator' ? `
+                                    <button class="star-button ${user.isStarred ? 'starred' : ''}" 
+                                            onclick="toggleStarredStatus('${user._id}', ${!user.isStarred})">
+                                        ${user.isStarred ? '★' : '☆'}
+                                    </button>
+                                ` : ''}
+                                ${user.role === 'hero' ? `
+                                    <button class="restrict-button ${user.isRestricted ? 'restricted' : ''}" 
+                                            onclick="toggleRestrictedStatus('${user._id}', ${!user.isRestricted})">
+                                        ${user.isRestricted ? '🔒' : '🔓'}
+                                    </button>
+                                ` : ''}
+                            </td>
+                        `;
+                        userTableBody.appendChild(row);
+                    });
+
+                    // Hide loading message
+                    document.getElementById('loading').style.display = 'none';
+                    // Show table
+                    document.getElementById('usersTable').style.display = 'table';
+                } else {
+                    showError('Failed to load user data');
+                }
+            } catch (error) {
+                console.error('Error loading user data:', error);
+                showError('Error loading user data');
+            }
+        }
+
+        // Load data when page loads
+        document.addEventListener('DOMContentLoaded', loadUserData);
+
+        // Refresh data every 30 seconds
+        setInterval(loadUserData, 30000);
+
+        // Add these functions after the loadUserData function
+        async function toggleStarredStatus(userId, isStarred) {
+            try {
+                const response = await fetch('http://localhost:5000/api/admin/toggle-starred', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ userId, isStarred })
+                });
+
+                const data = await response.json();
+                if (data.success) {
+                    loadUserData(); // Refresh the table
+                } else {
+                    showError('Failed to update starred status');
+                }
+            } catch (error) {
+                console.error('Error toggling starred status:', error);
+                showError('Error updating starred status');
+            }
+        }
+
+        async function toggleRestrictedStatus(userId, isRestricted) {
+            try {
+                const response = await fetch('http://localhost:5000/api/admin/toggle-restricted', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ userId, isRestricted })
+                });
+
+                const data = await response.json();
+                if (data.success) {
+                    loadUserData(); // Refresh the table
+                } else {
+                    showError('Failed to update restricted status');
+                }
+            } catch (error) {
+                console.error('Error toggling restricted status:', error);
+                showError('Error updating restricted status');
+            }
+        }
+    </script>
+    <h2>Uploaded Receipts</h2>
+    <table border="1" class="styled-table">
+      <thead>
+        <tr>
+          <th>Hero Email</th>
+          <th>Receipt</th>
+          <th>Uploaded At</th>
+           <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody id="receiptTableBody"></tbody>
+    </table>
+<!-- In your HTML body -->
+
+
+<script>
+async function fetchAndRenderFundRequests() {
+  try {
+    const res = await fetch('http://localhost:5000/api/fund-requests');
+    if (!res.ok) {
+      throw new Error(`HTTP error! status: ${res.status}`);
+    }
+    const data = await res.json();
+    if (!data.success) {
+      throw new Error(data.message || 'Failed to fetch fund requests');
+    }
+    
+    const container = document.getElementById('requests-container');
+    if (!container) {
+      console.error('Container element not found');
+      return;
+    }
+
+    container.innerHTML = data.requests.map(request => `
+      <div class="request-card">
+        <h3>${request.donationPurpose}</h3>
+        <p>Hero: ${request.heroName}</p>
+        <p>Amount Raised: ₹${request.amountRaised}</p>
+        <input type="number" placeholder="Enter amount" id="amount-${request._id}">
+        <button class="confirm-btn" data-id="${request._id}" data-hero-id="${request.heroId}">
+          Confirm Donation
+        </button>
+      </div>
+    `).join('');
+
+    // Attach click event listeners
+    document.querySelectorAll('.confirm-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const requestId = btn.dataset.id;
+        const heroId = btn.dataset.heroId;
+        const amountInput = document.getElementById(`amount-${requestId}`);
+        const amount = parseFloat(amountInput.value);
+        
+        if (isNaN(amount) || amount <= 0) {
+          alert('Please enter a valid amount');
+          return;
+        }
+        
+        confirmReceipt(requestId, heroId, amount);
+      });
+    });
+  } catch (err) {
+    console.error('Failed to fetch fund requests:', err);
+    alert('Failed to load fund requests. Please try again later.');
+  }
+}
+
+async function confirmReceipt(requestId, heroId, amount) {
+  try {
+    const res = await fetch('http://localhost:5000/api/admin/confirm-donation', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ requestId, heroId, amount })
+    });
+
+    if (!res.ok) {
+      const errorData = await res.json();
+      throw new Error(errorData.message || 'Failed to confirm donation');
+    }
+
+    const result = await res.json();
+    if (result.success) {
+      alert('Donation confirmed successfully!');
+      fetchAndRenderFundRequests(); // refresh UI
+    } else {
+      throw new Error(result.message || 'Failed to confirm donation');
+    }
+  } catch (err) {
+    console.error('Error confirming donation:', err);
+    alert(err.message || 'Failed to confirm donation. Please try again.');
+  }
+}
+
+fetchAndRenderFundRequests(); // Initial load
+</script>
+
+    <script>
+    // Function to fetch and render fund requests
+    async function fetchAndRenderFundRequests() {
+        // Fetch the list of hero causes from the API
+        const res = await fetch('/api/hero-causes');
+        const list = await res.json();
+        const container = document.getElementById('requests-container');
+
+        // Build HTML for each request and populate the container
+        container.innerHTML = list.map(r => `
+          <div class="card">
+            <p><strong>Hero:</strong> ${r.heroName}</p>
+            <p><strong>Purpose:</strong> ${r.purpose}</p>
+            <p><strong>Raised:</strong> ₹${r.amountRaised} / ₹${r.amountRequested}</p>
+            <button class="confirm-btn" data-id="${r.requestId}">
+              Confirm
+            </button>
+          </div>
+        `).join('');
+
+        // Attach click event listeners to all confirm buttons
+        document.querySelectorAll('.confirm-btn').forEach(btn =>
+          btn.addEventListener('click', () => 
+            confirmReceipt(btn.dataset.id) // Call confirmReceipt with the request ID
+          )
+        );
+      }
+
+      // Function to confirm a donation for a specific request
+      async function confirmReceipt(requestId) {
+        // Prompt the user to enter the donation amount
+        const amt = prompt("Enter amount:");
+        if (!amt || isNaN(amt)) return alert("Invalid"); // Validate the input
+
+        // Send the confirmation request to the API
+        const res = await fetch('/api/admin/confirm-donation', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ requestId, amount: parseFloat(amt) })
+        });
+
+        // Handle the response from the API
+        const data = await res.json();
+        if (data.success) {
+          alert('Donation confirmed!'); // Notify the user of success
+          fetchAndRenderFundRequests();  // Refresh the list of requests
+        } else {
+          alert(data.message); // Notify the user of any errors
+        }
+      }
+
+      // Fetch and render fund requests when the page loads
+      fetchAndRenderFundRequests();
+      </script>
+    <script>
+        async function loadReceipts() {
+            try {
+              const response = await fetch("http://localhost:5000/api/receipts");
+              const receipts = await response.json();
+          
+              if (receipts.success) {
+                const receiptTable = document.getElementById("receiptTableBody");
+                receiptTable.innerHTML = receipts.data
+                  .map(
+                    (receipt) => `
+                    <tr>
+                      <td>${receipt.userEmail}</td>
+                      <td><a href="http://localhost:5000${receipt.filePath}" target="_blank">View Receipt</a></td>
+                      <td>${new Date(receipt.uploadedAt).toLocaleString()}</td>
+                      <td>
+                        <button onclick="verifyReceipt('${receipt.filePath}', '${receipt.userEmail}')" class="verify-btn">
+                          Verify
+                        </button>
+                      </td>
+                    </tr>
+                  `
+                  )
+                  .join("");
+              } else {
+                console.error("Failed to load receipts:", receipts.message);
+              }
+            } catch (error) {
+              console.error("Error loading receipts:", error);
+            }
+          }
+          
+          async function verifyReceipt(filePath, userEmail) {
+            try {
+                const response = await fetch("http://localhost:5000/api/admin/verify-receipt", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        filePath,
+                        userEmail,
+                        verifiedAt: new Date().toISOString()
+                    })
+                });
+
+                const data = await response.json();
+                if (data.success) {
+                    alert("Receipt verified successfully!");
+                    loadReceipts(); // Refresh the table
+                } else {
+                    alert("Failed to verify receipt: " + data.message);
+                }
+            } catch (error) {
+                console.error("Error verifying receipt:", error);
+                alert("Error verifying receipt. Please try again.");
+            }
+        }
+
+        document.addEventListener("DOMContentLoaded", loadReceipts);
+    </script>
+
+    <h2>Donor Uploaded Receipts</h2>
+    <table border="1" class="styled-table">
+      <thead>
+        <tr>
+          <th>Donor Email</th>
+          <th>Donation Purpose</th>
+          <th>Receipt</th>
+          <th>Uploaded At</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody id="donorReceiptTableBody"></tbody>
+    </table>
+
+<script>
+
+    async function loadDonorReceipts() {
+        try {
+            const response = await fetch("http://localhost:5000/api/donor-receipts");
+            const receipts = await response.json();
+    
+            if (receipts.success) {
+                const donorReceiptTable = document.getElementById("donorReceiptTableBody");
+                donorReceiptTable.innerHTML = receipts.data
+                    .map(
+                        (receipt) => `
+                        <tr>
+                            <td>${receipt.userEmail || "N/A"}</td>
+                            <td>${receipt.donationPurpose || "Unknown Cause"}</td>
+                            <td><a href="http://localhost:5000${receipt.filePath}" target="_blank">View Receipt</a></td>
+                            <td>${new Date(receipt.uploadedAt).toLocaleString()}</td>
+                            <td>
+                                <button onclick="confirmDonation('${receipt.donationPurpose}', '${receipt.filePath}')">Confirm</button>
+                            </td>
+                        </tr>
+                    `
+                    )
+                    .join("");
+            } else {
+                console.error("Failed to load donor receipts:", receipts.message);
+            }
+        } catch (error) {
+            console.error("Error loading donor receipts:", error);
+        }
+    }
+
+    async function confirmDonation(donationPurpose, filePath) {
+        const amount = prompt("Enter the donation amount:");
+        if (!amount || isNaN(amount) || parseFloat(amount) <= 0) {
+            alert("Please enter a valid amount.");
+            return;
+        }
+
+        try {
+            // First, find the hero and fund request that matches the donation purpose
+            const response = await fetch("http://localhost:5000/api/fund-requests");
+            const data = await response.json();
+
+            if (!data.success) {
+                throw new Error("Failed to fetch fund requests");
+            }
+
+            // Find the matching fund request
+            const matchingRequest = data.requests.find(request => 
+                request.donationPurpose === donationPurpose
+            );
+
+            if (!matchingRequest) {
+                throw new Error("No matching fund request found for this donation");
+            }
+
+            // Update the amount raised for this request
+            const updateResponse = await fetch(`http://localhost:5000/api/fund-requests/${matchingRequest._id}/confirm-donation`, {
+                method: "PATCH",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    amount: parseFloat(amount)
+                })
+            });
+
+            if (!updateResponse.ok) {
+                const errorData = await updateResponse.json();
+                throw new Error(errorData.message || "Failed to confirm donation");
+            }
+
+            const updateData = await updateResponse.json();
+
+            if (updateData.success) {
+                alert("Donation confirmed successfully!");
+                loadDonorReceipts(); // Refresh the receipts table
+            } else {
+                throw new Error(updateData.message || "Failed to confirm donation");
+            }
+        } catch (error) {
+            console.error("Error confirming donation:", error);
+            alert("Error confirming donation: " + error.message);
+        }
+    }
+
+    document.addEventListener("DOMContentLoaded", loadDonorReceipts);
+   
+    
+    let currentRequestId = null;
+let currentRole = null;
+
+function confirmReceipt(requestId, role) {
+    console.log("Confirm button clicked for requestId:", requestId); // Debugging log
+
+    // Store the current requestId and role for use in the modal
+    currentRequestId = requestId;
+    currentRole = role;
+
+    // Show the modal
+    const modal = document.getElementById("donationModal");
+    modal.style.display = "flex";
+}
+async function confirmReceipt(requestId, role) {
+    console.log("Confirm button clicked for requestId:", requestId);
+    const enteredAmount = prompt("Enter the amount to add to the cause:");
+
+    if (!enteredAmount || isNaN(enteredAmount) || parseFloat(enteredAmount) <= 0) {
+        alert("Please enter a valid amount.");
+        return;
+    }
+
+    try {
+        const response = await fetch("http://localhost:5000/api/admin/confirm-donation", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                requestId,
+                role,
+                amount: parseFloat(enteredAmount),
+            }),
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+            alert("Donation confirmed successfully!");
+            updateProgressBars(); // Optional, for UI refresh
+        } else {
+            alert("Failed to confirm donation: " + data.message);
+        }
+    } catch (error) {
+        console.error("Error:", error);
+        alert("An error occurred.");
+    }
+}
+async function submitDonation() {
+    const donationPurpose = document.getElementById("donationPurpose").value.trim();
+    const enteredAmount = document.getElementById("donationAmount").value;
+
+    // Validate the inputs
+    if (!donationPurpose) {
+        alert("Please enter a valid cause name.");
+        return;
+    }
+    if (!enteredAmount || isNaN(enteredAmount) || parseFloat(enteredAmount) <= 0) {
+        alert("Please enter a valid amount.");
+        return;
+    }
+
+    console.log("Entered cause:", donationPurpose, "Entered amount:", enteredAmount); // Debugging log
+
+    try {
+        // Send the entered data to the backend
+        const response = await fetch("http://localhost:5000/api/admin/confirm-donation", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                donationPurpose,
+                amount: parseFloat(enteredAmount),
+            }),
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+            alert("Donation confirmed successfully!");
+            updateProgressBars(); // Refresh UI
+            closeModal(); // Close the modal
+        } else {
+            console.error("Failed to confirm donation:", data.message);
+            alert("Failed to confirm donation. Please try again.");
+        }
+    } catch (error) {
+        console.error("Error confirming donation:", error);
+        alert("An error occurred while confirming the donation.");
+    }
+}
+
+function closeModal() {
+    const modal = document.getElementById("donationModal");
+    modal.style.display = "none";
+
+    // Clear the input field
+    document.getElementById("donationAmount").value = "";
+
+    // Reset the current requestId and role
+    currentRequestId = null;
+    currentRole = null;
+}
+    function attachConfirmButtonListeners() {
+        document.querySelectorAll(".confirm-button").forEach(button => {
+            button.addEventListener("click", () => {
+                const requestId = button.dataset.requestid;
+                const role = button.dataset.role;
+                confirmReceipt(requestId, role); // Your function
+            });
+        });
+    }
+    // In your frontend JavaScript (where the progress bar exists)
+    async function updateProgressBars() {
+        try {
+            const response = await fetch("http://localhost:5000/api/causes");
+            const data = await response.json();
+    
+            if (data.success) {
+                const causesContainer = document.getElementById("causesContainer");
+                causesContainer.innerHTML = data.causes
+                    .map(
+                        (cause) => `
+                        <div class="cause-card">
+                            <h3>${cause.name}</h3>
+                            <p>${cause.description}</p>
+                            <div class="progress-bar-container">
+                                <div class="progress-bar" style="width: ${(cause.amountRaised / cause.amountRequested) * 100}%;"></div>
+                            </div>
+                            <p>Raised: ₹${cause.amountRaised} / ₹${cause.amountRequested}</p>
+                        </div>
+                    `
+                    )
+                    .join("");
+            } else {
+                console.error("Failed to load causes:", data.message);
+            }
+        } catch (error) {
+            console.error("Error loading causes:", error);
+        }
+    }
+</script>
+
+<!-- Donation Amount Modal -->
+<!-- Donation Amount Modal -->
+<!-- Donation Amount Modal -->
+<div id="donationModal" class="modal" style="display: none;">
+    <div class="modal-content">
+        <span class="close-button" onclick="closeModal()">&times;</span>
+        <h2>Confirm Donation</h2>
+        <p>Enter the amount to add to the cause:</p>
+        <input type="number" id="donationAmount" placeholder="Enter amount" min="1" required>
+        <button onclick="submitDonation()">Submit</button>
+    </div>
+</div>
+
+<style>
+    /* Modal Styles */
+    .modal {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 1000;
+    }
+
+    .modal-content {
+        background: white;
+        padding: 20px;
+        border-radius: 8px;
+        width: 300px;
+        text-align: center;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .close-button {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        font-size: 20px;
+        cursor: pointer;
+    }
+
+    input[type="number"] {
+        width: 100%;
+        padding: 10px;
+        margin: 10px 0;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+    }
+
+    button {
+        background-color: #4caf50;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+
+    button:hover {
+        background-color: #45a049;
+    }
+</style>
+
+<style>
+    /* Modal Styles */
+    .modal {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 1000;
+    }
+
+    .modal-content {
+        background: white;
+        padding: 20px;
+        border-radius: 8px;
+        width: 300px;
+        text-align: center;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .close-button {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        font-size: 20px;
+        cursor: pointer;
+    }
+
+    input[type="number"] {
+        width: 100%;
+        padding: 10px;
+        margin: 10px 0;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+    }
+
+    button {
+        background-color: #4caf50;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+
+    button:hover {
+        background-color: #45a049;
+    }
+</style>
+</body>
+</html>

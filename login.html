@@ -10,7 +10,7 @@
         :root {
             --primary-color: #4EA685;
             --secondary-color: #57B894;
-            --black: #000000;
+            --black: #000000;   
             --white: #ffffff;
             --gray: #efefef;
             --gray-2: #757575;
@@ -431,12 +431,12 @@
             <div class="col align-items-center flex-col sign-in">
                 <div class="form-wrapper align-items-center">
                     <div class="form sign-in">
-                        <form action="http://localhost:5000/api/users/login" method="POST">
+                        <form id="loginForm">
                             <div class="input-group">
-                                <input type="text" placeholder="Email" name="email" required>
+                                <input type="text" placeholder="Email" name="email" id="loginEmail" required>
                             </div>
                             <div class="input-group">
-                                <input type="password" placeholder="Password" name="password" required>
+                                <input type="password" placeholder="Password" name="password" id="loginPassword" required>
                             </div>
                             <button type="submit">Sign In</button>
                         </form>
@@ -510,16 +510,14 @@ otpForm.addEventListener('submit', async function (event) {
         const result = await response.json();
 
         if (result.success) {
-            alert(result.msg); // Show success message
-
-            // Redirect based on role
-            if (userRole === 'hero') {
-                window.location.href = "edit.html";
-            } else {
-                window.location.href = "web.html";
-            }
+            // Store both email and role in localStorage
+            localStorage.setItem('userEmail', userEmail);
+            localStorage.setItem('userRole', userRole);
+            
+            alert(result.msg);
+            window.location.href = "web.html";
         } else {
-            alert(result.msg); // Show error message
+            alert(result.msg);
         }
     } catch (error) {
         console.error('Error:', error);
@@ -527,6 +525,99 @@ otpForm.addEventListener('submit', async function (event) {
     }
 });
 
+// Update the login form submission handler
+document.getElementById('loginForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    const email = document.getElementById('loginEmail').value;
+    const password = document.getElementById('loginPassword').value;
+
+    try {
+        const response = await fetch('http://localhost:5000/api/users/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ email, password })
+        });
+
+        const data = await response.json();
+        if (data.success) {
+            // Store user data securely
+            localStorage.setItem('userEmail', email);
+            localStorage.setItem('userRole', data.user.role);
+            localStorage.setItem('userId', data.user.id);
+            localStorage.setItem('username', data.user.username);
+            
+            // Store role-specific details if available
+            if (data.user.roleDetails) {
+                localStorage.setItem('roleDetails', JSON.stringify(data.user.roleDetails));
+            }
+
+            // Set session expiry (24 hours)
+            const expiryTime = new Date().getTime() + (24 * 60 * 60 * 1000);
+            localStorage.setItem('sessionExpiry', expiryTime);
+
+            // Redirect based on role
+            if (data.user.role === 'admin') {
+                window.location.href = 'admin.html';
+            } else {
+                window.location.href = 'web.html';
+            }
+        } else {
+            // Display error message
+            const errorDiv = document.createElement('div');
+            errorDiv.className = 'error-message';
+            errorDiv.textContent = data.msg || 'Login failed. Please check your credentials.';
+            
+            // Insert error message after the form
+            const form = document.getElementById('loginForm');
+            form.insertAdjacentElement('afterend', errorDiv);
+
+            // Remove error message after 5 seconds
+            setTimeout(() => errorDiv.remove(), 5000);
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        const errorDiv = document.createElement('div');
+        errorDiv.className = 'error-message';
+        errorDiv.textContent = 'An error occurred. Please try again later.';
+        
+        const form = document.getElementById('loginForm');
+        form.insertAdjacentElement('afterend', errorDiv);
+
+        setTimeout(() => errorDiv.remove(), 5000);
+    }
+});
+
+// Add session check function
+function checkSession() {
+    const expiry = localStorage.getItem('sessionExpiry');
+    if (expiry) {
+        if (new Date().getTime() > parseInt(expiry)) {
+            // Session expired
+            localStorage.clear();
+            window.location.href = 'login.html?expired=true';
+        }
+    }
+}
+
+// Check session every minute
+setInterval(checkSession, 60000);
+
+// Check for expired session message
+window.onload = function() {
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('expired') === 'true') {
+        const errorDiv = document.createElement('div');
+        errorDiv.className = 'error-message';
+        errorDiv.textContent = 'Your session has expired. Please log in again.';
+        
+        const form = document.getElementById('loginForm');
+        form.insertAdjacentElement('beforebegin', errorDiv);
+
+        setTimeout(() => errorDiv.remove(), 5000);
+    }
+};
     </script>
 </body>
 

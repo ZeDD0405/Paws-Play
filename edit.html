@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Create or update your profile on PawsPlay. Manage your wishlist and receipts.">
     <meta name="keywords" content="profile creation, user profile, wishlist, receipts">
-    <title>Create Profile - PawsPlay</title>
+    <title>Edit Hero Profile - PawsPlay</title>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -76,7 +76,7 @@
         }
 
         .hero-profile {
-            background: linear-gradient(to right, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url('profile-bg.jpg') no-repeat center center/cover;
+            background: linear-gradient(to right, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url('images/profile-bg.svg') no-repeat center center/cover;
             color: white;
             text-align: center;
             padding: 6rem 1.5rem;
@@ -94,13 +94,13 @@
         .profile-content {
             padding: 2rem;
             max-width: 75rem;
-            margin: 0 auto;
+            margin: 6rem auto 2rem;
             background: var(--background-color);
             border-radius: 0.75rem;
             box-shadow: 0 0.5rem 1rem var(--shadow-color);
         }
 
-        .profile-info, .profile-form, .funds-request-form, .previous-funds-form {
+        .profile-section {
             margin-bottom: 2rem;
             padding: 2rem;
             background: #ffffff;
@@ -108,71 +108,57 @@
             box-shadow: 0 0.25rem 0.5rem var(--shadow-color);
         }
 
-        .profile-info img {
-            width: 150px;
-            height: 150px;
-            border-radius: 50%;
-            border: 5px solid var(--primary-color);
+        .profile-section h2 {
+            color: var(--primary-color);
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        label {
             display: block;
-            margin: 0 auto 1rem;
-        }
-
-        .profile-info h2 {
-            font-size: 2rem;
-            margin: 0.5rem 0;
+            margin-bottom: 0.5rem;
             font-weight: 500;
+            color: var(--text-color-dark);
         }
 
-        .profile-info p {
-            font-size: 1.1rem;
-            color: #555;
-        }
-
-        .profile-form input,
-        .profile-form textarea,
-        .profile-form button,
-        .funds-request-form input,
-        .funds-request-form textarea,
-        .funds-request-form button {
+        input, textarea {
             width: 100%;
             padding: 0.75rem;
-            margin: 0.5rem 0;
-            border-radius: 0.5rem;
             border: 1px solid var(--border-color);
-            box-sizing: border-box;
+            border-radius: 0.5rem;
+            font-size: 1rem;
+            margin-bottom: 1rem;
         }
 
-        .profile-form textarea,
-        .funds-request-form textarea {
+        textarea {
             resize: vertical;
+            min-height: 100px;
         }
 
-        .profile-form button,
-        .funds-request-form button {
+        button {
             background: var(--primary-color);
             color: white;
+            padding: 0.75rem 1.5rem;
             border: none;
+            border-radius: 0.5rem;
             cursor: pointer;
-            transition: background 0.3s ease;
-            padding: 0.75rem;
             font-size: 1rem;
+            transition: background 0.3s ease;
+            width: 100%;
         }
 
-        .profile-form button:hover,
-        .funds-request-form button:hover {
+        button:hover {
             background: var(--secondary-color);
         }
 
-        .upload-btn {
-            margin: 1rem 0;
-            text-align: center;
-        }
-
-        .upload-btn input[type="file"] {
+        .file-input {
             display: none;
         }
 
-        .upload-btn label {
+        .file-label {
             display: inline-block;
             background: var(--primary-color);
             color: white;
@@ -180,92 +166,49 @@
             border-radius: 0.5rem;
             cursor: pointer;
             transition: background 0.3s ease;
-            font-size: 1rem;
-        }
-
-        .upload-btn label:hover {
-            background: var(--secondary-color);
-        }
-
-        .receipt-dropdown {
-            display: none;
-            background: #f1f1f1;
-            padding: 1rem;
-            margin-top: 0.5rem;
-            border-radius: 0.5rem;
-            box-shadow: 0 0.25rem 0.5rem var(--shadow-color);
-        }
-
-        .receipt-dropdown.show {
-            display: block;
-        }
-
-        .funds-history-item {
+            text-align: center;
+            width: 100%;
             margin-bottom: 1rem;
-            padding: 1rem;
-            background: #ffffff;
-            border-radius: 0.5rem;
-            box-shadow: 0 0.25rem 0.5rem var(--shadow-color);
         }
 
-        .funds-history-item button {
-            background: var(--primary-color);
-            color: white;
-            padding: 0.5rem 1rem;
-            border-radius: 0.5rem;
-            cursor: pointer;
-            font-size: 1rem;
-            transition: background 0.3s ease;
-        }
-
-        .funds-history-item button:hover {
+        .file-label:hover {
             background: var(--secondary-color);
         }
 
-        .funds-request-form input[type="file"] {
+        .preview-image {
+            max-width: 200px;
+            margin: 1rem 0;
+            border-radius: 0.5rem;
             display: none;
         }
 
-        .funds-request-form label {
-            display: block;
-            margin: 1rem 0 0.5rem;
-        }
-
-        .funds-request-form input[type="file"] + label {
-            cursor: pointer;
-            background: var(--primary-color);
+        .success-message {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #4caf50;
             color: white;
-            padding: 0.75rem 1.5rem;
-            border-radius: 0.5rem;
-            transition: background 0.3s ease;
+            padding: 15px 30px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            display: none;
+            z-index: 1000;
         }
 
-        .funds-request-form input[type="file"]:hover + label {
-            background: var(--secondary-color);
+        .error-message {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #f44336;
+            color: white;
+            padding: 15px 30px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            display: none;
+            z-index: 1000;
         }
-
-        .submit-photo-btn {
-    display: inline-block;
-    margin: 1rem auto;
-    padding: 0.5rem;
-    background: var(--primary-color);
-    color: white;
-    border-radius: 0.25rem;
-    cursor: pointer;
-    font-size: 1rem; /* Match the text size */
-    transition: background 0.3s ease;
-    width: auto; /* Auto width to fit the content */
-    height: auto; /* Auto height to fit the content */
-    text-align: center;
-    line-height: normal;
-    border: 1px solid var(--primary-color); /* Border for better visibility */
-}
-
-.submit-photo-btn:hover {
-    background: var(--secondary-color);
-}
-
-
 
         footer {
             background: #343a40;
@@ -285,17 +228,74 @@
                 font-size: 2.5rem;
             }
         }
+
+        .nav-buttons {
+            display: flex;
+            align-items: center;
+        }
+
+        .back-button {
+            background-color: transparent;
+            color: white;
+            border: 2px solid white;
+            padding: 8px 16px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            margin-right: 15px;
+        }
+
+        .back-button:hover {
+            background-color: white;
+            color: var(--primary-color);
+        }
+
+        .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .preview-container {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .preview-image {
+            max-width: 200px;
+            max-height: 200px;
+            margin: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        .required-field::after {
+            content: " *";
+            color: red;
+        }
+        .error-message {
+            color: red;
+            font-size: 14px;
+            margin-top: 5px;
+            display: none;
+        }
     </style>
 </head>
 <body>
+    <div id="successMessage" class="success-message">Fund request submitted successfully!</div>
+    <div id="errorMessage" class="error-message">Error submitting request. Please try again.</div>
+
     <header>
-        <nav class="container">
+        <nav>
+            <div class="container">
             <h1>PawsPlay</h1>
-            <ul>
-                <li><a href="#profile">Profile</a></li>
-                <li><a href="#contact">Contact</a></li>
-                <li><a href="#">Logout</a></li>
-            </ul>
+                <div class="nav-buttons">
+                    <a href="web.html" class="back-button">← Back</a>
+                </div>
+            </div>
         </nav>
     </header>
 
@@ -304,76 +304,504 @@
         <p>Connecting people who want to help animals in need.</p>
     </section>
 
-    <section class="profile-content">
-        <div class="profile-info">
-            <img src="profile.jpg" alt="Profile Picture">
-            <h2>John Doe</h2>
-            <p>Animal Lover & Activist</p>
+    <div class="profile-content">
+        <!-- Hero Profile Section -->
+        <div class="profile-section">
+            <h2>Hero Profile</h2>
+            <div class="form-group">
+                <label for="heroName">Hero Name</label>
+                <input type="text" id="heroName" name="heroName" required>
         </div>
 
-        <div class="profile-form">
-            <h2>Upload Profile Picture</h2>
-            <div class="upload-btn">
-                <input type="file" id="profilePic" accept="image/*">
-                <label for="profilePic">Choose Image</label>
+            <div class="form-group">
+                <label for="heroProfilePicture">Hero Profile Picture</label>
+                <input type="file" id="heroProfilePicture" name="heroProfilePicture" accept="image/*">
+                <div class="preview-container">
+                    <img id="heroProfilePreview" src="images/default-profile.svg" alt="Profile Picture Preview">
+                </div>
+            </div>
+
+            <!--
+            <div class="form-group">
+                <label for="qrCode">UPI QR Code (Required)</label>
+                <input type="file" id="qrCode" name="qrCode" accept="image/*" required>
+                <div class="preview-container">
+                    <img id="qrCodePreview" src="images/default-qr.svg" alt="QR Code Preview">
+                </div>
+                <small class="error-message" id="qrCodeError"></small>
+            </div>
+            -->
+
+            <div class="form-group">
+                <label for="location">Location</label>
+                <input type="text" id="location" name="location" placeholder="Enter your location">
             </div>
         </div>
 
-        <div class="funds-request-form">
-            <h2>Add Request for Funds</h2>
-            <form>
-                <label for="donationPurpose">Donation Purpose</label>
-                <textarea id="donationPurpose" placeholder="Donation purpose for this request" rows="4"></textarea>
+        <!-- Fund Request Section -->
+        <div class="profile-section">
+            <h2>Fund Request</h2>
+            <form id="fundRequestForm" enctype="multipart/form-data">
+                <div class="form-group">
+                    <label for="heroName" class="required-field">Your Name:</label>
+                    <input type="text" id="heroName" name="heroName" required>
+                </div>
 
-                <label for="animalPhoto">Photo of the Animal</label>
-                <input type="file" id="animalPhoto" accept="image/*">
-                <button type="button" class="submit-photo-btn">Submit</button>
+                <div class="form-group">
+                    <label for="donationPurpose" class="required-field">Purpose of Donation:</label>
+                    <input type="text" id="donationPurpose" name="donationPurpose" required>
+        </div>
 
+                <div class="form-group">
+                    <label for="itemDescription" class="required-field">Description:</label>
+                    <textarea id="itemDescription" name="itemDescription" required></textarea>
+                    </div>
 
-                <label for="itemDescription">Item Description</label>
-                <textarea id="itemDescription" placeholder="Describe the items needed..." rows="4"></textarea>
+                <div class="form-group">
+                    <label for="amountRequested" class="required-field">Amount Requested (₹):</label>
+                    <input type="number" id="amountRequested" name="amountRequested" required min="1">
+                </div>
 
-                <label for="link">Link</label>
-                <input type="url" id="link" placeholder="Provide relevant link to the cause">
+                <div class="form-group">
+                    <label for="qrCode" class="required-field">Your QR Code:</label>
+                    <input type="file" id="qrCode" name="qrCode" accept="image/*" required>
+                    <div id="qrPreview" class="preview-container"></div>
+                    <div id="qrError" class="error-message">Please upload your QR code</div>
+                    </div>
 
-                <button type="submit">Submit Fund Request</button>
+                <div class="form-group">
+                    <label for="animalPhoto" class="required-field">Animal Photo:</label>
+                    <input type="file" id="animalPhoto" name="animalPhoto" accept="image/*" required>
+                    <div id="animalPreview" class="preview-container"></div>
+                    <div id="animalError" class="error-message">Please upload an animal photo</div>
+                </div>
+
+                <button type="submit" class="submit-btn">Submit Request</button>
             </form>
-        </div>
-
-        <div class="previous-funds-form">
-            <h2>Show History of Previous Funds</h2>
-            <div id="fundsHistory">
-                <div class="funds-history-item">
-                    <h3>Request 1</h3>
-                    <p>Donation Purpose: Help for animal shelter</p>
-                    <button class="show-receipt">Show Receipt</button>
-                    <div class="receipt-dropdown">
-                        <p>Receipt: <a href="#">View Receipt</a></p>
-                    </div>
-                </div>
-                <div class="funds-history-item">
-                    <h3>Request 2</h3>
-                    <p>Donation Purpose: Medicines for stray dog</p>
-                    <button class="show-receipt">Show Receipt</button>
-                    <div class="receipt-dropdown">
-                        <p>Receipt: <a href="#">View Receipt</a></p>
-                    </div>
-                </div>
             </div>
         </div>
-    </section>
 
+   
+
+    <script>
+        // Store form data in localStorage instead of a variable
+        function saveFormData() {
+            const formData = {
+                heroName: document.getElementById('heroName').value,
+                purpose: document.getElementById('donationPurpose').value,
+                amountRequested: document.getElementById('amountRequested').value,
+                itemDescription: document.getElementById('itemDescription').value,
+                itemLink: document.getElementById('itemLink').value
+            };
+            localStorage.setItem('lastSubmittedData', JSON.stringify(formData));
+        }
+
+        // Load hero profile data when page loads
+        async function loadProfileData() {
+            const userEmail = localStorage.getItem('userEmail');
+            const userRole = localStorage.getItem('userRole');
+            
+            if (!userEmail || userRole !== 'hero') {
+                window.location.href = 'web.html';
+                return;
+            }
+
+            try {
+                const response = await fetch('http://localhost:5000/api/users/profile', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ email: userEmail })
+                });
+
+                const data = await response.json();
+                if (data.success && data.user) {
+                    // Check for saved form data first
+                    const savedData = localStorage.getItem('lastSubmittedData');
+                    if (savedData) {
+                        const parsedData = JSON.parse(savedData);
+                        const heroNameInput = document.getElementById('heroName');
+                        const donationPurposeInput = document.getElementById('donationPurpose');
+                        const amountRequestedInput = document.getElementById('amountRequested');
+                        const itemsNeededInput = document.getElementById('itemDescription');
+                        const itemLinkInput = document.getElementById('itemLink');
+
+                        if (heroNameInput) heroNameInput.value = parsedData.heroName || '';
+                        if (donationPurposeInput) donationPurposeInput.value = parsedData.purpose || '';
+                        if (amountRequestedInput) amountRequestedInput.value = parsedData.amountRequested || '';
+                        if (itemsNeededInput) itemsNeededInput.value = parsedData.itemDescription || '';
+                        if (itemLinkInput) itemLinkInput.value = parsedData.itemLink || '';
+                    } else {
+                        // Otherwise use data from the server
+                        const heroNameInput = document.getElementById('heroName');
+                        if (heroNameInput) heroNameInput.value = data.user.username || '';
+                        
+                        if (data.user.heroProfile && data.user.heroProfile.fundRequests && data.user.heroProfile.fundRequests.length > 0) {
+                            const latestRequest = data.user.heroProfile.fundRequests[data.user.heroProfile.fundRequests.length - 1];
+                            const donationPurposeInput = document.getElementById('donationPurpose');
+                            const amountRequestedInput = document.getElementById('amountRequested');
+                            const itemsNeededInput = document.getElementById('itemDescription');
+                            const itemLinkInput = document.getElementById('itemLink');
+
+                            if (donationPurposeInput) donationPurposeInput.value = latestRequest.purpose || '';
+                            if (amountRequestedInput) amountRequestedInput.value = latestRequest.amountRequested || '';
+                            if (itemsNeededInput) itemsNeededInput.value = latestRequest.itemDescription || '';
+                            if (itemLinkInput) itemLinkInput.value = latestRequest.itemLink || '';
+                        }
+                    }
+                }
+            } catch (error) {
+                console.error('Error fetching profile:', error);
+            }
+        }
+
+        // Load profile data when page loads
+        document.addEventListener('DOMContentLoaded', loadProfileData);
+
+        // Handle image previews
+        function setupImagePreview(inputId, previewId) {
+            const input = document.getElementById(inputId);
+            const preview = document.getElementById(previewId);
+
+            input.addEventListener('change', function(e) {
+                const file = e.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        preview.src = e.target.result;
+                        preview.style.display = 'block';
+                    }
+                    reader.readAsDataURL(file);
+                }
+            });
+        }
+
+        setupImagePreview('heroProfilePicture', 'heroProfilePreview');
+        setupImagePreview('qrCode', 'qrCodePreview');
+
+        // Show success message function
+        function showSuccessMessage() {
+            const successMessage = document.getElementById('successMessage');
+            successMessage.style.display = 'block';
+            document.getElementById('errorMessage').style.display = 'none';
+            
+            setTimeout(() => {
+                successMessage.style.display = 'none';
+            }, 3000);
+        }
+
+        // Function to submit fund request
+        async function submitFundRequest(event) {
+            event.preventDefault();
+            
+            // Validate required fields
+            const heroName = document.getElementById('heroName').value;
+            const purpose = document.getElementById('donationPurpose').value;
+            const amountRequested = document.getElementById('amountRequested').value;
+            const itemDescription = document.getElementById('itemDescription').value;
+            const animalPhoto = document.getElementById('animalPhoto').files[0];
+            const qrCode = document.getElementById('qrCode').files[0];
+
+            if (!heroName || !purpose || !amountRequested || !itemDescription || !animalPhoto || !qrCode) {
+                const errorMessage = document.getElementById('errorMessage');
+                errorMessage.textContent = 'Please fill in all required fields and upload both an animal photo and QR code.';
+                errorMessage.style.display = 'block';
+                setTimeout(() => {
+                    errorMessage.style.display = 'none';
+                }, 5000);
+                return;
+            }
+
+            // Validate amount is a positive number
+            const amount = Number(amountRequested);
+            if (isNaN(amount) || amount <= 0) {
+                const errorMessage = document.getElementById('errorMessage');
+                errorMessage.textContent = 'Please enter a valid amount greater than 0.';
+                errorMessage.style.display = 'block';
+                setTimeout(() => {
+                    errorMessage.style.display = 'none';
+                }, 5000);
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append('email', localStorage.getItem('userEmail'));
+            formData.append('heroName', heroName);
+            formData.append('donationPurpose', purpose);
+            formData.append('amountRequested', amount.toString());
+            formData.append('itemDescription', itemDescription);
+            formData.append('animalPhoto', animalPhoto);
+            formData.append('qrCode', qrCode);
+
+            try {
+                const response = await fetch('http://localhost:5000/api/users/fund-request', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const data = await response.json();
+                
+                if (data.success) {
+                    // Save form data for future use
+                    saveFormData();
+                    
+                    const successMessage = document.getElementById('successMessage');
+                    successMessage.textContent = 'Fund request submitted successfully!';
+                    successMessage.style.display = 'block';
+                    
+                    // Clear file inputs
+                    document.getElementById('animalPhoto').value = '';
+                    document.getElementById('animalPreview').style.display = 'none';
+                    
+                    // Load updated fund requests
+                    loadFundRequests();
+                } else {
+                    throw new Error(data.msg || 'Failed to submit fund request');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                const errorMessage = document.getElementById('errorMessage');
+                errorMessage.textContent = error.message || 'Error submitting fund request. Please try again.';
+                errorMessage.style.display = 'block';
+                setTimeout(() => {
+                    errorMessage.style.display = 'none';
+                }, 5000);
+            }
+        }
+
+        // Attach event listener to form submission
+        document.getElementById('fundRequestForm').addEventListener('submit', submitFundRequest);
+
+        // Preview images before upload
+        document.getElementById('heroProfilePicture').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById('heroProfilePreview').src = e.target.result;
+                }
+                reader.readAsDataURL(file);
+            }
+        });
+
+        document.getElementById('qrCode').addEventListener('change', function() {
+            previewImage(this, 'qrPreview');
+        });
+
+        document.getElementById('animalPhoto').addEventListener('change', function() {
+            previewImage(this, 'animalPreview');
+        });
+
+        // Form submission
+        const profileForm = document.getElementById('profileForm');
+        if (profileForm) {
+            profileForm.addEventListener('submit', async function(e) {
+                e.preventDefault();
+                
+                // Validate QR code
+                const qrCodeInput = document.getElementById('qrCode');
+                if (!qrCodeInput.files[0]) {
+                    document.getElementById('qrCodeError').textContent = 'Please upload a UPI QR code';
+                    return;
+                }
+
+                const formData = new FormData();
+                formData.append('email', localStorage.getItem('userEmail'));
+                formData.append('heroName', document.getElementById('heroName').value);
+                formData.append('location', document.getElementById('location').value);
+                
+                // Append profile picture if selected
+                const heroProfilePicture = document.getElementById('heroProfilePicture').files[0];
+                if (heroProfilePicture) {
+                    formData.append('heroProfilePicture', heroProfilePicture);
+                }
+                
+                // Append QR code
+                const qrCode = document.getElementById('qrCode').files[0];
+                formData.append('qrCode', qrCode);
+
+                try {
+                    const response = await fetch('http://localhost:5000/api/users/update-profile', {
+                        method: 'POST',
+                        body: formData
+                    });
+
+                    const data = await response.json();
+                    if (data.success) {
+                        alert('Profile updated successfully!');
+                        window.location.href = 'web.html';
+                    } else {
+                        alert(data.message || 'Error updating profile');
+                    }
+                } catch (error) {
+                    console.error('Error:', error);
+                    alert('Error updating profile');
+                }
+            });
+        }
+
+        function previewImage(input, previewId) {
+            const preview = document.getElementById(previewId);
+            const errorId = previewId === 'qrPreview' ? 'qrError' : 'animalError';
+            const errorElement = document.getElementById(errorId);
+            
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    preview.innerHTML = `<img src="${e.target.result}" class="preview-image" alt="Preview">`;
+                    errorElement.style.display = 'none';
+                };
+                reader.readAsDataURL(input.files[0]);
+            } else {
+                preview.innerHTML = '';
+                errorElement.style.display = 'block';
+            }
+        }
+    </script>
+    <div class="profile-section">
+        <h2>Upload Hero Receipt</h2>
+        <form id="receiptUploadForm" enctype="multipart/form-data">
+            <div class="form-group">
+                <label for="receiptFile" class="required-field">Upload Receipt:</label>
+                <input type="file" id="receiptFile" name="receiptFile" accept="image/*,application/pdf" required>
+            </div>
+            <button type="submit" class="submit-btn">Upload Receipt</button>
+        </form>
+        <div id="receiptUploadStatus" class="success-message" style="display: none;">Receipt uploaded successfully!</div>
+        <div id="receiptUploadError" class="error-message" style="display: none;">Error uploading receipt. Please try again.</div>
+    </div>
+    
+    <script>
+        document.getElementById("receiptUploadForm").addEventListener("submit", async function (event) {
+            event.preventDefault(); 
+          
+            const receiptFile = document.getElementById("receiptFile").files[0];
+            const userEmail = localStorage.getItem("userEmail"); // Ensure this is set in localStorage
+           // const userRole = localStorage.getItem("userRole");
+            const donationPurpose = document.getElementById("donationPurpose").value; // Get donation purpose
+            if (!receiptFile || !userEmail) {
+              const errorMessage = document.getElementById("receiptUploadError");
+              errorMessage.textContent = "Please select a receipt file and ensure you are logged in.";
+              errorMessage.style.display = "block";
+              setTimeout(() => {
+                errorMessage.style.display = "none";
+              }, 5000);
+              return;
+            }
+          
+            const formData = new FormData();
+            formData.append("receipt", receiptFile);
+            formData.append("userEmail", userEmail);
+           formData.append("donationPurpose", donationPurpose);
+
+           
+          
+            try {
+              const response = await fetch("http://localhost:5000/api/admin/receipts/upload", {
+                method: "POST",
+                body: formData,
+              });
+          
+              const result = await response.json();
+              if (result.success) {
+                const successMessage = document.getElementById("receiptUploadStatus");
+                successMessage.textContent = "Receipt uploaded successfully!";
+                successMessage.style.display = "block";
+                setTimeout(() => {
+                  successMessage.style.display = "none";
+                }, 5000);
+              } else {
+                throw new Error(result.message || "Failed to upload receipt.");
+              }
+            } catch (error) {
+              console.error("Error uploading receipt:", error);
+              const errorMessage = document.getElementById("receiptUploadError");
+              errorMessage.textContent = error.message || "Error uploading receipt. Please try again.";
+              errorMessage.style.display = "block";
+              setTimeout(() => {
+                errorMessage.style.display = "none";
+              }, 5000);
+            }
+          });
+    </script>
+    <script>
+        document.getElementById("receiptUploadForm").addEventListener("submit", function (event) {
+            event.preventDefault(); // Prevent the form from submitting immediately
+        
+            // Show the modal to ask for the purpose
+            const purposeModal = document.getElementById("purposeModal");
+            purposeModal.style.display = "flex";
+        
+            // Handle modal actions
+            document.getElementById("submitPurposeButton").onclick = async function () {
+                const purposeInput = document.getElementById("purposeInput").value.trim();
+                const purposeError = document.getElementById("purposeError");
+        
+                if (!purposeInput) {
+                    purposeError.style.display = "block"; // Show error if purpose is empty
+                    return;
+                }
+        
+                purposeError.style.display = "none"; // Hide error
+                purposeModal.style.display = "none"; // Hide the modal
+        
+                // Proceed with the receipt upload
+                const receiptFile = document.getElementById("receiptFile").files[0];
+                const userEmail = localStorage.getItem("userEmail");
+        
+                if (!receiptFile || !userEmail) {
+                    const errorMessage = document.getElementById("receiptUploadError");
+                    errorMessage.textContent = "Please select a receipt file and ensure you are logged in.";
+                    errorMessage.style.display = "block";
+                    setTimeout(() => {
+                        errorMessage.style.display = "none";
+                    }, 5000);
+                    return;
+                }
+        
+                const formData = new FormData();
+                formData.append("receipt", receiptFile);
+                formData.append("userEmail", userEmail);
+                formData.append("donationPurpose", purposeInput);
+        
+                try {
+                    const response = await fetch("http://localhost:5000/api/admin/receipts/upload", {
+                        method: "POST",
+                        body: formData,
+                    });
+        
+                    const result = await response.json();
+        
+                    if (result.success) {
+                        const successMessage = document.getElementById("receiptUploadStatus");
+                        successMessage.textContent = "Receipt uploaded successfully!";
+                        successMessage.style.display = "block";
+                        setTimeout(() => {
+                            successMessage.style.display = "none";
+                        }, 5000);
+                    } else {
+                        throw new Error(result.message || "Failed to upload receipt.");
+                    }
+                } catch (error) {
+                    console.error("Error uploading receipt:", error);
+                    const errorMessage = document.getElementById("receiptUploadError");
+                    errorMessage.textContent = error.message || "Error uploading receipt. Please try again.";
+                    errorMessage.style.display = "block";
+                    setTimeout(() => {
+                        errorMessage.style.display = "none";
+                    }, 5000);
+                }
+            };
+        
+            document.getElementById("cancelPurposeButton").onclick = function () {
+                purposeModal.style.display = "none"; // Hide the modal
+            };
+        });
+    </script>    
+   
     <footer>
         <p>&copy; 2025 PawsPlay. All rights reserved.</p>
     </footer>
-
-    <script>
-        document.querySelectorAll('.show-receipt').forEach(button => {
-            button.addEventListener('click', () => {
-                const dropdown = button.nextElementSibling;
-                dropdown.classList.toggle('show');
-            });
-        });
-    </script>
 </body>
 </html>
